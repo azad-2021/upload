@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2022 at 02:29 PM
+-- Generation Time: Apr 28, 2022 at 02:26 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -43,26 +43,27 @@ CREATE TABLE `attendencedetails` (
 
 CREATE TABLE `class` (
   `ClassID` int(11) NOT NULL,
-  `Class` varchar(5) NOT NULL
+  `Class` varchar(5) NOT NULL,
+  `Fees` decimal(5,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `class`
 --
 
-INSERT INTO `class` (`ClassID`, `Class`) VALUES
-(1, 'I'),
-(2, 'II'),
-(3, 'III'),
-(4, 'IV'),
-(5, 'V'),
-(6, 'VI'),
-(7, 'VII'),
-(8, 'VIII'),
-(9, 'IX'),
-(10, 'X'),
-(11, 'XI'),
-(12, 'XII');
+INSERT INTO `class` (`ClassID`, `Class`, `Fees`) VALUES
+(1, 'I', '0.00'),
+(2, 'II', '0.00'),
+(3, 'III', '0.00'),
+(4, 'IV', '0.00'),
+(5, 'V', '0.00'),
+(6, 'VI', '0.00'),
+(7, 'VII', '0.00'),
+(8, 'VIII', '0.00'),
+(9, 'IX', '0.00'),
+(10, 'X', '0.00'),
+(11, 'XI', '0.00'),
+(12, 'XII', '0.00');
 
 -- --------------------------------------------------------
 
@@ -76,6 +77,7 @@ CREATE TABLE `feesdetails` (
   `Month` int(11) NOT NULL,
   `FeesAmount` decimal(5,2) NOT NULL,
   `ReceivedAmount` decimal(5,2) NOT NULL,
+  `Discount` decimal(5,2) NOT NULL DEFAULT 0.00,
   `UpdatedByID` int(11) NOT NULL,
   `UpdatedDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -119,8 +121,10 @@ CREATE TABLE `salary` (
 CREATE TABLE `staff` (
   `StaffID` int(11) NOT NULL,
   `StaffName` varchar(100) NOT NULL,
-  `MobileNo` int(11) NOT NULL,
-  `AadharCardNo` int(11) NOT NULL,
+  `Gender` varchar(50) DEFAULT NULL,
+  `MobileNo` varchar(50) NOT NULL,
+  `Email` varchar(200) DEFAULT NULL,
+  `AadharCardNo` int(20) NOT NULL,
   `Address` varchar(500) NOT NULL,
   `EducationDetails` varchar(500) NOT NULL,
   `Password` varchar(50) NOT NULL,
@@ -128,6 +132,15 @@ CREATE TABLE `staff` (
   `EntryByID` int(11) NOT NULL,
   `Inservice` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `staff`
+--
+
+INSERT INTO `staff` (`StaffID`, `StaffName`, `Gender`, `MobileNo`, `Email`, `AadharCardNo`, `Address`, `EducationDetails`, `Password`, `EntryDate`, `EntryByID`, `Inservice`) VALUES
+(2, 'dfsgbs', 'Male', '123123', 'abc@123', 23312, '113', '1231', 'ramanujan@123', '2022-04-28', 1, 0),
+(3, 'ABC', 'Female', '1234564568', 'abc@1233', 2147483647, 'GGGt', 'NNN', 'ramanujan@123', '2022-04-28', 1, 1),
+(4, 'ABCD', 'Male', '1234564567', 'abc@1236', 2147483647, 'hhh', 'yyy', 'ramanujan@123', '2022-04-28', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -274,7 +287,7 @@ ALTER TABLE `salary`
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `staffattendence`
