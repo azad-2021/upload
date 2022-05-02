@@ -53,15 +53,9 @@
       <span>Add Subject</span>
     </a>
   </li><!-- End Profile Page Nav -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-faq.html">
-      <i class="bi bi-person"></i>
-      <span>Staff List</span>
-    </a>
-  </li><!-- End F.A.Q Page Nav -->
 
   <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-contact.html">
+    <a class="nav-link collapsed" href="studentlist.php">
       <i class="bi bi-person"></i>
       <span>Student List</span>
     </a>

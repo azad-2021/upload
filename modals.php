@@ -76,7 +76,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form align="center">
+        <form align="center" method="POST" action="" enctype="multipart/form-data">
           <div class="row">
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">Student Name</label>
@@ -84,7 +84,7 @@
             </div>
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">Class</label>
-              <select class="form-control">
+              <select class="form-control" name="StudentClass" required="">
                 <option value="">Select</option>
                 <?php 
                 $query ="SELECT * FROM class";
@@ -97,18 +97,18 @@
               </div>
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">Father's Name</label>
-                <input type="text" class="form-control" id="FReceiptNo">
+                <input type="text" class="form-control" name="Father" required="">
               </div>            
 
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">Mother's Name</label>
-                <input type="text" class="form-control" id="FReceiptNo">
+                <input type="text" class="form-control" name="Mother" required="">
               </div>
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">Gender:</label>
                 <br>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="Gender" id="Gender" value="Male">
+                  <input class="form-check-input" type="radio" name="Gender" id="Gender" value="Male" required="">
                   <label class="form-check-label" for="flexRadioDefault1">
                     Male
                   </label>
@@ -122,20 +122,20 @@
               </div>
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">AADHAR Card Number</label>
-                <input type="text" class="form-control" id="FReceiptNo">
+                <input type="number" class="form-control" name="Aadhar" min="0" required="">
               </div>
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">Mobile Number</label>
-                <input type="text" class="form-control" id="FReceiptNo">
+                <input type="number" class="form-control" name="Mobile" min="0" required="">
               </div>
               <div class="col-lg-3">
                 <label for="recipient-name" class="col-form-label">Address</label>
-                <input type="text" class="form-control" id="FReceiptNo">
+                <input type="text" class="form-control" name="Address">
               </div>
               <center>
                 <div class="col-lg-3">
                   <label for="recipient-name" class="col-form-label">Upload Image</label>
-                  <input type="file" class="form-control" id="FReceiptNo">
+                  <input type="file" class="form-control" name = "image" / required="">
                   <br>
                 </div>
               </center>
@@ -143,8 +143,9 @@
             </div>
             <div class="modal-footer">
               <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+              <button type="submit" class="btn btn-primary" name="SaveStudent">Save</button>
             </form>
-            <button type="button" class="btn btn-primary">Save</button>
           </div>
         </div>
       </div>

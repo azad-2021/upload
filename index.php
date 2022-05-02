@@ -5,6 +5,7 @@ date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
 $userid=1;
+
 if (isset($_POST['SaveStaff'])) {
   $Name=$_POST['StaffName'];
   $Mobile=$_POST['StaffNumber'];
@@ -53,6 +54,58 @@ if (isset($_POST['SaveStaff'])) {
     if ($con->query($sql) === TRUE) {
       $Upload=move_uploaded_file($file_tmp,"resume/".$Resume);
       echo '<script>alert("Staff added successfully")</script>';
+      echo "<meta http-equiv='refresh' content='0'>";
+    } else {
+      echo "Error: " . $sql . "<br>" . $con->error;
+    }
+  }else{
+    echo $errors;
+  }
+  $con->close();
+
+}
+
+
+
+if (isset($_POST['SaveStudent'])) {
+  $Name=$_POST['StudentName'];
+  $Class=$_POST['StudentClass'];
+  $Father=$_POST['Father'];
+  $Mother=$_POST['Mother'];
+  $Gender=$_POST['Gender'];
+  $Address=$_POST['Address'];
+  $Aadhar=$_POST['Aadhar'];
+  $Mobile=$_POST['Mobile'];
+
+  $file_name = $_FILES['image']['name'];
+  $file_size =$_FILES['image']['size'];
+  $file_tmp =$_FILES['image']['tmp_name'];
+  $file_type=$_FILES['image']['type'];
+  $tmp = explode('.', $_FILES['image']['name']);
+  $file_ext = strtolower(end($tmp));    
+  $file=$Aadhar.".".$file_ext;         
+  $extensions= array("jpeg", "JPEG", "jpg", "JPG");
+
+  $errors='';
+
+  if(in_array($file_ext,$extensions)=== false){
+    $errors ='<script>alert("File must be pdf")</script>';
+  }elseif($file_size > 2097152){
+    $errors ='<script>alert("File must be less than 2MB")</script>';
+  }elseif($file_size == 0){
+    $errors ='<script>alert("File must be less than 2MB")</script>';
+  }elseif(strlen((string)$Mobile<10)){
+    $errors='<script>alert("Mobile Number Must Be 10 Digit Long")</script>';
+  }
+
+  if (empty($errors)) {
+
+    $sql = "INSERT INTO students (StudentName, ClassID, Gender, FatherName, MotherName, AadharCardNo, MobileNo,  Address, Password, RegistrationDate, RegisteredByID )
+    VALUES ('$Name', $Class, '$Gender', '$Father', '$Mother', $Aadhar, $Mobile, '$Address', 'ramanujan@123', '$Date', $userid)";
+
+    if ($con->query($sql) === TRUE) {
+      $Upload=move_uploaded_file($file_tmp,"student_pic/".$file);
+      echo '<script>alert("Student added successfully")</script>';
       echo "<meta http-equiv='refresh' content='0'>";
     } else {
       echo "Error: " . $sql . "<br>" . $con->error;
