@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2022 at 02:26 PM
+-- Generation Time: May 04, 2022 at 02:53 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -179,6 +179,13 @@ CREATE TABLE `students` (
   `Passout` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`StudentID`, `StudentName`, `ClassID`, `Gender`, `FatherName`, `MotherName`, `AadharCardNo`, `MobileNo`, `Address`, `RollNo`, `Photo`, `Password`, `RegistrationDate`, `RegisteredByID`, `Passout`) VALUES
+(1, 'ABC', 1, 'Female', 'CDE', 'FGH', 123456789, 2147483647, 'LKO', 0, 0, 'ramanujan@123', '2022-05-02', 1, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -187,9 +194,19 @@ CREATE TABLE `students` (
 
 CREATE TABLE `subjects` (
   `SubjectID` int(11) NOT NULL,
-  `SubjectName` int(11) NOT NULL,
+  `SubjectName` varchar(50) NOT NULL,
   `ClassID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `subjects`
+--
+
+INSERT INTO `subjects` (`SubjectID`, `SubjectName`, `ClassID`) VALUES
+(1, 'Mathematics', 1),
+(2, 'English', 2),
+(3, 'Hindi', 1),
+(4, 'Maths', 11);
 
 --
 -- Indexes for dumped tables
@@ -299,13 +316,13 @@ ALTER TABLE `staffattendence`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `StudentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `SubjectID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `SubjectID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
