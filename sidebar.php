@@ -61,7 +61,7 @@
     </a>
   </li><!-- End Contact Page Nav -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="pages-faq.html">
+    <a class="nav-link collapsed sublist" href="" data-bs-toggle="modal" data-bs-target="#SubjectList">
       <i class="bi bi-card-list"></i>
       <span>Subject List</span>
     </a>
@@ -73,6 +73,13 @@
       <span>Pending Fees</span>
     </a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="" href="" data-bs-toggle="modal" data-bs-target="#AddFees">
+      <i class="bi bi-person"></i>
+      <span>Update Fees</span>
+    </a>
+  </li><!-- End Profile Page Nav -->
+
   <li class="nav-item">
     <a class="nav-link collapsed" href="" href="" data-bs-toggle="modal" data-bs-target="#AddSalary">
       <i class="bi bi-person"></i>

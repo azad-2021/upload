@@ -419,6 +419,26 @@ if (isset($_POST['SaveStudent'])) {
   var hoverBorder='rgba(200, 200, 200, 1)';
   var xcolor=["#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1", "#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1","#4154f1"];
 
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+  }
+
+
   function limit(element)
   {
     var max_chars = 10;
@@ -589,6 +609,72 @@ if (isset($_POST['SaveStudent'])) {
   };
   var chart = new ApexCharts(document.querySelector("#PendingSalary"), options3);
   chart.render();
+
+  $(document).on('click', '.SaveSubject', function(){
+    var subject = document.getElementById("subject").value;
+    var ClassID= document.getElementById("SubClass").value;
+    if (subject!='' && ClassID !='') {
+      $.ajax({
+        type:'POST',
+        url:'insert.php',
+        data:{'subject':subject, 'ClassID':ClassID},
+        success:function(data){
+          swal("success","Subject added","success"); 
+          $('#AddSubject').modal('hide');
+          $('#Fsubject').trigger("reset");
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.sublist', function(){
+    $.ajax({
+      type:'POST',
+      url:'read.php',
+      data:{'subjectlist':'subjectlist'},
+      success:function(result){
+        $('#sublist').html(result);
+      }
+    });
+  });
+
+
+
+  $(document).on('change', '#FeesClass', function(){
+    var ClassID=$(this).val();
+    console.log(ClassID);
+    if (ClassID) {
+      $.ajax({
+        type:'POST',
+        url:'read.php',
+        data:{'ClassID':ClassID},
+        success:function(result){
+          $('#FeesStudent').html(result);
+        }
+      });
+    }
+  });
+
+
+  $(document).on('click', '.SaveFees', function(){
+    var ClassID = document.getElementById("FeesClass").value;
+    var StudentID= document.getElementById("FeesStudent").value;
+    var Month = document.getElementById("FeesMonth").value;
+    var Amount = document.getElementById("FeesAmount").value;
+    console.log(Month);
+    if (StudentID!='' && ClassID !='' && Month!='' && Amount!='') {
+      $.ajax({
+        type:'POST',
+        url:'insert.php',
+        data:{'FeesAmount':Amount, 'ClassID':ClassID},
+        success:function(data){
+          swal("success","Subject added","success"); 
+          //$('#AddSubject').modal('hide');
+          //$('#Fsubject').trigger("reset");
+        }
+      });
+    }
+  });
 
 </script>
 </body>
