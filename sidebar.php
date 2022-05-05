@@ -15,19 +15,8 @@
         <i class="bi bi-search"></i><span>Find</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="" data-bs-toggle="modal" data-bs-target="#StaffF">
-            <i class="bi bi-circle"></i><span>Staff</span>
-          </a>
-        </li>
-        <li>
           <a href="" data-bs-toggle="modal" data-bs-target="#StudentF">
             <i class="bi bi-circle"></i><span>Student</span>
-          </a>
-        </li>
-        <li>
-          <a href="" data-bs-toggle="modal" data-bs-target="#ReceiptF">
-            <i class="bi bi-circle"></i><span>Receipt No</span>
           </a>
         </li>
       </ul>

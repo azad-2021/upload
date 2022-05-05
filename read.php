@@ -43,4 +43,30 @@ if (!empty($ClassID))
     
 }
 
+$ClassIDAmount=!empty($_POST['ClassIDAmount'])?$_POST['ClassIDAmount']:'';
+if (!empty($ClassIDAmount))
+{
+    $query="SELECT Fees from class WHERE ClassID=$ClassIDAmount";
+    $result = mysqli_query($con,$query);
+    if(mysqli_num_rows($result)>0)
+    {
+    	$arr=mysqli_fetch_assoc($result);
+        echo $arr['Fees'];
+    }
+    
+}
+
+
+$StaffID=!empty($_POST['StaffID'])?$_POST['StaffID']:'';
+if (!empty($StaffID))
+{
+    $query="SELECT SalaryAmount from staff WHERE StaffID=$StaffID";
+    $result = mysqli_query($con,$query);
+    if(mysqli_num_rows($result)>0)
+    {
+    	$arr=mysqli_fetch_assoc($result);
+        echo $arr['SalaryAmount'];
+    }
+    
+}
 ?>

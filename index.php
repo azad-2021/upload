@@ -14,6 +14,7 @@ if (isset($_POST['SaveStaff'])) {
   $Address=$_POST['StaffAddress'];
   $Education=$_POST['StaffEducation'];
   $Email=$_POST['StaffEmail'];
+  $Salary=$_POST['SalaryAmount'];
 
   $file_name = $_FILES['Resume']['name'];
   $file_size =$_FILES['Resume']['size'];
@@ -29,7 +30,7 @@ if (isset($_POST['SaveStaff'])) {
   $result1 = mysqli_query($con, $query);
   
 
-  $query ="SELECT * FROM `staff` WHERE Email='$Email";
+  $query ="SELECT * FROM `staff` WHERE Email='$Email'";
   $result2 = mysqli_query($con, $query);
 
   if(in_array($file_ext,$extensions)=== false){
@@ -48,8 +49,8 @@ if (isset($_POST['SaveStaff'])) {
 
   if (empty($errors)) {
 
-    $sql = "INSERT INTO staff (StaffName, MobileNo, Email, AadharCardNo, Address, EducationDetails, Password, EntryDate, EntryByID, Gender)
-    VALUES ('$Name', $Mobile, '$Email', $Aadhar, '$Address', '$Education', 'ramanujan@123', '$Date', $userid, '$Gender')";
+    $sql = "INSERT INTO staff (StaffName, MobileNo, Email, AadharCardNo, Address, EducationDetails, Password, EntryDate, EntryByID, Gender, SalaryAmount)
+    VALUES ('$Name', $Mobile, '$Email', $Aadhar, '$Address', '$Education', 'ramanujan@123', '$Date', $userid, '$Gender', $Salary)";
 
     if ($con->query($sql) === TRUE) {
       $Upload=move_uploaded_file($file_tmp,"resume/".$Resume);
@@ -381,7 +382,7 @@ if (isset($_POST['SaveStudent'])) {
 
         </div>
       </div><!-- End Left side columns -->
-
+      <div id="re"></div>
     </div>
   </section>
 
@@ -650,6 +651,14 @@ if (isset($_POST['SaveStudent'])) {
         data:{'ClassID':ClassID},
         success:function(result){
           $('#FeesStudent').html(result);
+          $.ajax({
+            type:'POST',
+            url:'read.php',
+            data:{'ClassIDAmount':ClassID},
+            success:function(result){
+              document.getElementById("Fees").value=(result);
+            }
+          });
         }
       });
     }
@@ -657,25 +666,78 @@ if (isset($_POST['SaveStudent'])) {
 
 
   $(document).on('click', '.SaveFees', function(){
-    var ClassID = document.getElementById("FeesClass").value;
+    var Fees = document.getElementById("Fees").value;
     var StudentID= document.getElementById("FeesStudent").value;
     var Month = document.getElementById("FeesMonth").value;
     var Amount = document.getElementById("FeesAmount").value;
     console.log(Month);
-    if (StudentID!='' && ClassID !='' && Month!='' && Amount!='') {
+    if (StudentID!='' && Fees !='' && Month!='' && Amount!='') {
       $.ajax({
         type:'POST',
         url:'insert.php',
-        data:{'FeesAmount':Amount, 'ClassID':ClassID},
-        success:function(data){
-          swal("success","Subject added","success"); 
-          //$('#AddSubject').modal('hide');
-          //$('#Fsubject').trigger("reset");
+        data:{'FeesAmount':Amount, 'Fees':Fees, 'Month':Month, 'StudentID':StudentID},
+        success:function(result){
+          swal("success","Fees Updated","success"); 
+          $('#re').html(result);
+          $('#AddFees').modal('hide');
+          $('#FeesForm').trigger("reset");
         }
       });
     }
   });
 
+
+  $(document).on('click', '.SearchStudent', function(){
+    var Name = document.getElementById("FStudentName").value;
+    if (Name) {
+      $.ajax({
+        type:'POST',
+        url:'search.php',
+        data:{'StudentName':Name},
+        success:function(result){
+          $('#StudentData').html(result);
+          $('#StudentDetails').modal('show');
+        }
+      });
+    }
+  });
+
+
+  $(document).on('change', '#StaffIDS', function(){
+    var StaffID=$(this).val();
+    console.log(StaffID);
+    if (StaffID) {
+      $.ajax({
+        type:'POST',
+        url:'read.php',
+        data:{'StaffID':StaffID},
+        success:function(result){
+          document.getElementById("SalaryAmount").value=(result);
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.SaveSalary', function(){
+    var Salary = document.getElementById("Salary").value;
+    var StaffID= document.getElementById("StaffIDS").value;
+    var Month = document.getElementById("SalaryMonth").value;
+    var Amount = document.getElementById("SalaryAmount").value;
+    console.log(Month);
+    if (StaffID!='' && Salary !='' && Month!='' && Amount!='') {
+      $.ajax({
+        type:'POST',
+        url:'insert.php',
+        data:{'SalaryAmount':Amount, 'Salary':Salary, 'Month':Month, 'StaffID':StaffID},
+        success:function(result){
+          swal("success","Salary Updated","success"); 
+          $('#re').html(result);
+          $('#AddSalary').modal('hide');
+          $('#SalaryForm').trigger("reset");
+        }
+      });
+    }
+  });
 </script>
 </body>
 

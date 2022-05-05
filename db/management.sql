@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2022 at 02:53 PM
+-- Generation Time: May 05, 2022 at 02:22 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.9
 
@@ -44,7 +44,7 @@ CREATE TABLE `attendencedetails` (
 CREATE TABLE `class` (
   `ClassID` int(11) NOT NULL,
   `Class` varchar(5) NOT NULL,
-  `Fees` decimal(5,2) NOT NULL DEFAULT 0.00
+  `Fees` decimal(9,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -63,7 +63,7 @@ INSERT INTO `class` (`ClassID`, `Class`, `Fees`) VALUES
 (9, 'IX', '0.00'),
 (10, 'X', '0.00'),
 (11, 'XI', '0.00'),
-(12, 'XII', '0.00');
+(12, 'XII', '1200.00');
 
 -- --------------------------------------------------------
 
@@ -74,10 +74,10 @@ INSERT INTO `class` (`ClassID`, `Class`, `Fees`) VALUES
 CREATE TABLE `feesdetails` (
   `ID` int(11) NOT NULL,
   `StudentID` int(11) NOT NULL,
-  `Month` int(11) NOT NULL,
-  `FeesAmount` decimal(5,2) NOT NULL,
-  `ReceivedAmount` decimal(5,2) NOT NULL,
-  `Discount` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `FeesOfMonth` date DEFAULT NULL,
+  `TotalAmount` decimal(9,2) NOT NULL,
+  `ReceivedAmount` decimal(9,2) NOT NULL,
+  `Discount` decimal(9,2) NOT NULL DEFAULT 0.00,
   `UpdatedByID` int(11) NOT NULL,
   `UpdatedDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -93,7 +93,7 @@ CREATE TABLE `markdetails` (
   `StudentID` int(11) NOT NULL,
   `SubjectID` int(11) NOT NULL,
   `ExamNo` int(11) NOT NULL,
-  `Marks` decimal(3,2) NOT NULL,
+  `Marks` decimal(9,2) NOT NULL,
   `UpdatedByID` int(11) NOT NULL,
   `UpdatedDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -108,9 +108,32 @@ CREATE TABLE `salary` (
   `ID` int(11) NOT NULL,
   `StaffID` int(11) NOT NULL,
   `Month` int(11) NOT NULL,
-  `SalaryAmount` decimal(5,2) NOT NULL,
-  `ReceivedAmount` decimal(5,2) NOT NULL
+  `SalaryAmount` decimal(9,2) NOT NULL,
+  `ReceivedAmount` decimal(9,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salarydetails`
+--
+
+CREATE TABLE `salarydetails` (
+  `ID` int(11) NOT NULL,
+  `StaffID` int(11) NOT NULL,
+  `SalaryAmount` decimal(9,2) NOT NULL,
+  `ReceivedAmount` decimal(9,2) NOT NULL,
+  `SalaryOfMonth` date NOT NULL,
+  `UpdatedDate` date DEFAULT NULL,
+  `UpdatedByID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `salarydetails`
+--
+
+INSERT INTO `salarydetails` (`ID`, `StaffID`, `SalaryAmount`, `ReceivedAmount`, `SalaryOfMonth`, `UpdatedDate`, `UpdatedByID`) VALUES
+(1, 3, '0.00', '1000.00', '2022-05-01', '2022-05-05', 1);
 
 -- --------------------------------------------------------
 
@@ -127,6 +150,7 @@ CREATE TABLE `staff` (
   `AadharCardNo` int(20) NOT NULL,
   `Address` varchar(500) NOT NULL,
   `EducationDetails` varchar(500) NOT NULL,
+  `SalaryAmount` decimal(9,2) NOT NULL,
   `Password` varchar(50) NOT NULL,
   `EntryDate` date NOT NULL,
   `EntryByID` int(11) NOT NULL,
@@ -137,10 +161,11 @@ CREATE TABLE `staff` (
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`StaffID`, `StaffName`, `Gender`, `MobileNo`, `Email`, `AadharCardNo`, `Address`, `EducationDetails`, `Password`, `EntryDate`, `EntryByID`, `Inservice`) VALUES
-(2, 'dfsgbs', 'Male', '123123', 'abc@123', 23312, '113', '1231', 'ramanujan@123', '2022-04-28', 1, 0),
-(3, 'ABC', 'Female', '1234564568', 'abc@1233', 2147483647, 'GGGt', 'NNN', 'ramanujan@123', '2022-04-28', 1, 1),
-(4, 'ABCD', 'Male', '1234564567', 'abc@1236', 2147483647, 'hhh', 'yyy', 'ramanujan@123', '2022-04-28', 1, 1);
+INSERT INTO `staff` (`StaffID`, `StaffName`, `Gender`, `MobileNo`, `Email`, `AadharCardNo`, `Address`, `EducationDetails`, `SalaryAmount`, `Password`, `EntryDate`, `EntryByID`, `Inservice`) VALUES
+(2, 'dfsgbs', 'Male', '123123', 'abc@123', 23312, '113', '1231', '0.00', 'ramanujan@123', '2022-04-28', 1, 0),
+(3, 'ABC', 'Female', '1234564568', 'abc@1233', 2147483647, 'GGGt', 'NNN', '0.00', 'ramanujan@123', '2022-04-28', 1, 1),
+(4, 'ABCD', 'Male', '1234564567', 'abc@1236', 2147483647, 'hhh', 'yyy', '0.00', 'ramanujan@123', '2022-04-28', 1, 1),
+(5, 'XYZ', 'Male', '1234564599', '431@gmail', 1236666666, 'AAAS', 'ZZZ', '999.99', 'ramanujan@123', '2022-05-05', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -243,6 +268,12 @@ ALTER TABLE `salary`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `salarydetails`
+--
+ALTER TABLE `salarydetails`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
@@ -301,10 +332,16 @@ ALTER TABLE `salary`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `salarydetails`
+--
+ALTER TABLE `salarydetails`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `staffattendence`
