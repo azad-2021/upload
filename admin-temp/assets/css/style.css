@@ -7714,6 +7714,7 @@ textarea {
   margin: 0;
   font-family: inherit;
   font-size: inherit;
+  color: white;
   line-height: inherit; }
 
 button,
@@ -8970,6 +8971,7 @@ progress {
   color: #212529;
   background-color: #2A3038;
   background-clip: padding-box;
+  color: white;
   border: 1px solid #2c2e33;
   appearance: none;
   border-radius: 2px;
@@ -20833,5 +20835,7 @@ div.tagsinput {
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1; }
+
+
 
 /*# sourceMappingURL=maps/style.css.map */
