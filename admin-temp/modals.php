@@ -100,7 +100,7 @@
             </div>
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">AADHAR Card Number</label>
-              <input style="color:white" type="number" class="form-control" name="StaffAadhar" required min="0" maxlength="12">
+              <input style="color:white" type="number" class="form-control" name="StaffAadhar" required min="0" maxlength="16">
             </div>
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">Salary Amount</label>
@@ -124,7 +124,7 @@
             </div>
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">Mobile Number</label>
-              <input style="color:white" type="text" class="form-control" name="StaffNumber" onkeydown="limit(this);" onkeyup="limit(this);" length=10 required>
+              <input style="color:white" type="text" class="form-control" name="StaffNumber" onkeydown="limit(this);" onkeyup="limit(this);" required>
             </div>
             <div class="col-lg-3">
               <label for="recipient-name" class="col-form-label">Email</label>

@@ -7,10 +7,9 @@ $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
 $userid=1;
 
-
 if (isset($_POST['SaveStaff'])) {
   $Name=$_POST['StaffName'];
-  $Mobile='+91'.$_POST['StaffNumber'];
+  $Mobile=$_POST['StaffNumber'];
   $Aadhar=$_POST['StaffAadhar'];
   $Gender=$_POST['Gender'];
   $Address=$_POST['StaffAddress'];
@@ -28,15 +27,12 @@ if (isset($_POST['SaveStaff'])) {
   $extensions= array("pdf");
 
   $errors='';
-  $query ="SELECT * FROM `staff` WHERE MobileNo='$Mobile'";
+  $query ="SELECT * FROM `staff` WHERE MobileNo=$Mobile";
   $result1 = mysqli_query($con, $query);
   
 
   $query ="SELECT * FROM `staff` WHERE Email='$Email'";
   $result2 = mysqli_query($con, $query);
-
-  $query ="SELECT * FROM `staff` WHERE AadharCardNo='$Aadhar'";
-  $result3 = mysqli_query($con, $query);
 
   if(in_array($file_ext,$extensions)=== false){
     $errors ='<script>alert("File must be pdf")</script>';
@@ -50,14 +46,12 @@ if (isset($_POST['SaveStaff'])) {
     $errors='<script>alert("Mobile Number Already Exist")</script>';
   }elseif (mysqli_num_rows($result2)>0){
     $errors='<script>alert("Email Already Exist")</script>';
-  }elseif (mysqli_num_rows($result3)>0){
-    $errors='<script>alert("Aadhar Card Number Already Exist")</script>';
   }
 
   if (empty($errors)) {
 
     $sql = "INSERT INTO staff (StaffName, MobileNo, Email, AadharCardNo, Address, EducationDetails, Password, EntryDate, EntryByID, Gender, SalaryAmount)
-    VALUES ('$Name', '$Mobile', '$Email', '$Aadhar', '$Address', '$Education', 'demo@123', '$Date', $userid, '$Gender', $Salary)";
+    VALUES ('$Name', $Mobile, '$Email', $Aadhar, '$Address', '$Education', 'ramanujan@123', '$Date', $userid, '$Gender', $Salary)";
 
     if ($con->query($sql) === TRUE) {
       $Upload=move_uploaded_file($file_tmp,"resume/".$Resume);
@@ -68,8 +62,8 @@ if (isset($_POST['SaveStaff'])) {
     }
   }else{
     echo $errors;
-    echo "<meta http-equiv='refresh' content='0'>";
   }
+
 
 }
 
@@ -83,7 +77,7 @@ if (isset($_POST['SaveStudent'])) {
   $Gender=$_POST['Gender'];
   $Address=$_POST['Address'];
   $Aadhar=$_POST['Aadhar'];
-  $Mobile='+91'.$_POST['Mobile'];
+  $Mobile=$_POST['Mobile'];
 
   $file_name = $_FILES['image']['name'];
   $file_size =$_FILES['image']['size'];
@@ -96,10 +90,6 @@ if (isset($_POST['SaveStudent'])) {
 
   $errors='';
 
-  $query ="SELECT * FROM students WHERE AadharCardNo='$Aadhar'";
-  $result = mysqli_query($con, $query);
-
-
   if(in_array($file_ext,$extensions)=== false){
     $errors ='<script>alert("File must be JPG or JPEG format")</script>';
   }elseif($file_size > 2097152){
@@ -108,14 +98,12 @@ if (isset($_POST['SaveStudent'])) {
     $errors ='<script>alert("File must be less than 2MB")</script>';
   }elseif(strlen((string)$Mobile<10)){
     $errors='<script>alert("Mobile Number Must Be 10 Digit Long")</script>';
-  }elseif (mysqli_num_rows($result)>0){
-    $errors='<script>alert("Aadhar Card Number Already Exist")</script>';
   }
 
   if (empty($errors)) {
 
     $sql = "INSERT INTO students (StudentName, ClassID, Gender, FatherName, MotherName, AadharCardNo, MobileNo,  Address, Password, RegistrationDate, RegisteredByID )
-    VALUES ('$Name', $Class, '$Gender', '$Father', '$Mother', '$Aadhar', '$Mobile', '$Address', 'demo@123', '$Date', $userid)";
+    VALUES ('$Name', $Class, '$Gender', '$Father', '$Mother', '$Aadhar', '$Mobile', '$Address', 'ramanujan@123', '$Date', $userid)";
 
     if ($con->query($sql) === TRUE) {
       $Upload=move_uploaded_file($file_tmp,"student_pic/".$file);
