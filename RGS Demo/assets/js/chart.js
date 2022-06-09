@@ -5,10 +5,10 @@ $(function() {
    */
    'use strict';
    var data = {
-    labels: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"],
+    labels: ["Polytechnic", "B.Tech", "B.Pharma", "D.Phrama"],
     datasets: [{
       label: 'Pending Fees',
-      data: [1200, 1900, 300, 500, 200, 300, 500, 700, 1000, 1400, 1500, 1800],
+      data: [1200, 1900, PendingBPharma, 500],
       backgroundColor: [
       'rgba(255, 99, 132, 0.2)',
       'rgba(54, 162, 235, 0.2)',
@@ -44,10 +44,10 @@ $(function() {
 
 
 var data2 = {
-    labels: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"],
+    labels: ["Polytechnic", "B.Tech", "B.Pharma", "D.Phrama"],
     datasets: [{
       label: 'Pending Fees',
-      data: [60, 70, 80, 70, 50, 90, 100, 88, 85, 56, 32, 25],
+      data: [60, 70, 80, 70],
       backgroundColor: [
       'rgba(255, 99, 132, 0.2)',
       'rgba(54, 162, 235, 0.2)',
