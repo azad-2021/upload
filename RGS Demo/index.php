@@ -5,6 +5,48 @@ include"connection.php";
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
+$Day = date('d',strtotime($timestamp));
+
+
+//echo $Date;
+if ($Day==1) {
+
+  $query="SELECT * from salarydetails WHERE SalaryOfMonth='$Date'";
+  $result = mysqli_query($con,$query);
+  if(mysqli_num_rows($result)>0)
+  {
+
+  }else{
+    $query2="SELECT SalaryAmount, StaffID from staff WHERE Inservice=1";
+
+    $result2 = mysqli_query($con,$query2);
+    if(mysqli_num_rows($result2)>0)
+    {
+
+      while($arr=mysqli_fetch_assoc($result2)){
+        $SalaryAmount=$arr['SalaryAmount'];
+        $StaffID=$arr['StaffID'];
+
+        $sql = "INSERT INTO salarydetails (StaffID, SalaryOfMonth, SalaryAmount)
+        VALUES ($StaffID, '$Date', $SalaryAmount)";
+
+        if ($con->query($sql) === TRUE) {
+
+
+
+        } else {
+          echo "Error: " . $sql . "<br>" . $con->error;
+        }
+
+
+      }
+
+    }
+  }
+}
+
+
+
 $userid=1;
 
 if (isset($_POST['SaveStaff'])) {
@@ -143,6 +185,20 @@ $row=mysqli_fetch_assoc($result);
 $NoStudents=$row['count(StudentID)'];
 $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
 
+$query ="SELECT sum(salarydetails.SalaryAmount), sum(salarydetails.ReceivedAmount), StaffName FROM salarydetails
+join staff on salarydetails.StaffID=staff.StaffID
+WHERE Inservice=1 GROUP BY salarydetails.StaffID";
+
+$StaffArray=array();
+$PendingSalaryArray=array();
+$PendingSalary=0;
+$result = mysqli_query($con, $query);
+while($row=mysqli_fetch_assoc($result)){
+  $StaffArray[]=$row['StaffName'];
+  $PendingSalaryArray[]=$row['sum(salarydetails.SalaryAmount)']-$row['sum(salarydetails.ReceivedAmount)'];
+}
+
+$PendingSalary=array_sum($PendingSalaryArray);
 ?>
 
 <!DOCTYPE html>
@@ -254,7 +310,7 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
                 <div class="row">
                   <div class="col-9">
                     <div class="d-flex align-items-center align-self-start">
-                      <h3 class="mb-0"><i class="mdi mdi-currency-inr"></i> 15000</h3>
+                      <h3 class="mb-0"><i class="mdi mdi-currency-inr"></i><?php echo $PendingSalary; ?></h3>
                     </div>
                   </div>
                   <div class="col-3">
@@ -522,9 +578,9 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
           </div>
 
         </div>
-<script type="text/javascript">
-  var PendingBPharma=<?php echo $PendingFeesBPharma ?>
-</script>
+        <script type="text/javascript">
+          var PendingBPharma=<?php echo $PendingFeesBPharma ?>
+        </script>
 
         <script src="assets/vendors/js/vendor.bundle.base.js"></script>
         <!-- endinject -->
@@ -550,35 +606,6 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
         <!-- End custom js for this page -->
 
         <script type="text/javascript">
-          $(document).on('click', '.SaveSubject', function(){
-            var subject = document.getElementById("subject").value;
-            var ClassID= document.getElementById("SubClass").value;
-            if (subject!='' && ClassID !='') {
-              $.ajax({
-                type:'POST',
-                url:'insert.php',
-                data:{'subject':subject, 'ClassID':ClassID},
-                success:function(data){
-                  swal("success","Subject added","success"); 
-                  $('#AddSubject').modal('hide');
-                  $('#Fsubject').trigger("reset");
-                }
-              });
-            }
-          });
-
-          $(document).on('click', '.sublist', function(){
-            $.ajax({
-              type:'POST',
-              url:'read.php',
-              data:{'subjectlist':'subjectlist'},
-              success:function(result){
-                $('#sublist').html(result);
-              }
-            });
-          });
-
-
 
           $(document).on('change', '#BranchIDF', function(){
             var BranchID=$(this).val();
@@ -672,6 +699,16 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
                   document.getElementById("SalaryAmount").value=(result);
                 }
               });
+
+              $.ajax({
+                type:'POST',
+                url:'read.php',
+                data:{'StaffIDD':StaffID},
+                success:function(result){
+                  $('#SalaryData').html(result);
+                }
+              });
+
             }
           });
 
@@ -735,9 +772,48 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
 
           });
 
+
+          $(document).on('change', '#CIDAddSalary', function(){
+            var CourseID= $(this).val();
+
+            if(CourseID){
+              $.ajax({
+                type:'POST',
+                url:'search.php',
+                data:{'CourseIDF':CourseID},
+                success:function(result){
+                  $('#BIDAddSalary').html(result);
+                }
+              }); 
+            }else{
+              $('#BIDAddSalary').html('<option value="">Branch</option>'); 
+            }
+
+          });
+
+          $(document).on('change', '#BIDAddSalary', function(){
+            var BranchID= $(this).val();
+
+            if(BranchID){
+              $.ajax({
+                type:'POST',
+                url:'read.php',
+                data:{'BranchIDS':BranchID},
+                success:function(result){
+                  $('#StaffIDS').html(result);
+                }
+              }); 
+            }else{
+              $('#StaffIDS').html('<option value="">Staff</option>'); 
+            }
+
+          });
+
         </script>
 
       </body>
       </html>
 
-      <?php   $con->close(); ?>
+      <?php
+      echo $PendingSalary;
+      $con->close(); ?>

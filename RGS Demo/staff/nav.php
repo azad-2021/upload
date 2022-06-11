@@ -32,11 +32,11 @@
         </li>
 
         <li class="nav-item menu-items">
-          <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#Attendance">
+          <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#ApplyLeave">
             <span class="menu-icon">
               <i class="mdi mdi-chart-bar"></i>
             </span>
-            <span class="menu-title">Student Attendance</span>
+            <span class="menu-title">Apply for Leave</span>
           </a>
         </li>
 
@@ -88,7 +88,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                 <div class="navbar-profile">
-                  <img class="img-xs rounded-circle" src="assets/images/faces/face15.jpg" alt="">
+                  <img class="img-xs rounded-circle" src="../assets/images/faces/face15.jpg" alt="">
                   <p class="mb-0 d-none d-sm-block navbar-profile-name">ABC</p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>

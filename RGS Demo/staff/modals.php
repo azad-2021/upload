@@ -1,105 +1,30 @@
 <!-- Modal -->
-<div class="modal fade" id="Registration" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal fade" id="ApplyLeave" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content rounded-corner">
       <div class="modal-header rounded-corner">
-        <h5 class="modal-title">Enter Student Details</h5>
+        <h5 class="modal-title">Apply Leave</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form align="center" method="POST" action="" enctype="multipart/form-data" style="color:white;">
-          <div class="row">
-
-            <div class="col-lg-4">
-              <label for="recipient-name" class="col-form-label">Select Course</label>
-              <select style="color:white" class="form-control" name="CourseID" id="CourseID" required="">
-                <option value="">Select</option>
-                <?php 
-                $query ="SELECT * FROM courses";
-                $result = mysqli_query($con, $query);
-                if (mysqli_num_rows($result)>0){
-                  while($row=mysqli_fetch_assoc($result)){
-                    echo '<option value="'.$row['CourseID'].'">'.$row['Course'].'</option>';
-                  }}?>
-                </select>
-              </div>
-
+        <form align="center" method="POST" action="" style="color:white;">
+          <div class="row" style="margin-bottom:10px;">
               <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Select Branch</label>
-                <select style="color:white" class="form-control" name="BranchID" id="BranchID" required="">
-                  <option value="">Select</option>
-                </select>
+                <label for="recipient-name" class="col-form-label">Reason</label>
+                <textarea  style="color:white;" class="form-control" name="Description" required></textarea>
               </div>
-
               <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Student Name</label>
-                <input style="color:white" style="color:white" type="text" class="form-control" name="StudentName">
-              </div>
-
-              <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Father's Name</label>
-                <input style="color:white" type="text" class="form-control" name="Father" required="">
+                <label for="recipient-name" class="col-form-label">Start Date</label>
+                <input style="color:white" type="date" class="form-control" name="SDate" required>
               </div>            
-
               <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Mother's Name</label>
-                <input style="color:white" type="text" class="form-control" name="Mother" required="">
+                <label for="recipient-name" class="col-form-label">End Date</label>
+                <input style="color:white" type="date" class="form-control" name="EDate" required>
               </div>
-              <div class="col-lg-4">
-                <br>
-                <label for="recipient-name" class="col-form-label" style="margin-right: 10px;">Gender: </label>
-                
-                <input style="color:white; margin: 10px;" class="form-check-input" type="radio" name="Gender" id="Gender" value="Male" required="">
-                <label class="form-check-label" for="flexRadioDefault1">
-                  Male
-                </label>
-                <input style="color:white; margin: 10px;" class="form-check-input" type="radio" name="Gender" id="Gender" value="Female">
-                <label class="form-check-label" for="flexRadioDefault2">
-                  Female
-                </label>
-              </div>
-              <div class="col-lg-4">
-                <br><br>
-                <input class="form-check-input" type="checkbox" name="lateral" value="1" style="margin-right:10px">
-                <label class="form-check-label" for="inlineFormCheck">
-                  Lateral Entry
-                </label>
-
-              </div>
-
-              <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">AADHAR Card Number</label>
-                <input style="color:white" type="number" class="form-control" name="Aadhar" min="0" required="">
-              </div>
-              <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Mobile Number</label>
-                <input style="color:white" type="number" class="form-control" name="Mobile" min="0" required="">
-              </div>
-              <div class="col-lg-4">
-                <label for="recipient-name" class="col-form-label">Address</label>
-                <input style="color:white" style="color:white" type="text" class="form-control" name="Address">
-              </div>
-
-              <div class="col-lg-4" align="center">
-                <label for="recipient-name" class="col-form-label">Upload Image</label>
-                <input style="color:white" style="color:white" type="file" class="form-control" name = "image" / required="">
-                <br>
-              </div>
-              <div class="col-lg-4" align="center">
-                <label for="recipient-name" class="col-form-label">Course Amount</label>
-                <input style="color:white" min="0" type="number" class="form-control" name="Amount" required>
-                <br>
-              </div>
-              <div class="col-lg-12" align="center">
-                <label for="recipient-name" class="col-form-label">Remark</label>
-                <textarea class="form-control" name="Remark" style="color:white" required></textarea>
-              </div>
-
             </div>
             <div class="modal-footer">
               <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-              <button type="submit" class="btn btn-primary" name="SaveStudent">Save</button>
+              <button type="submit" class="btn btn-primary" name="SaveLeave">Save</button>
             </form>
           </div>
         </div>

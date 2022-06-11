@@ -69,61 +69,28 @@ if (isset($_POST['SaveStaff'])) {
 
 
 
-if (isset($_POST['SaveStudent'])) {
-  $Name=$_POST['StudentName'];
-  $BranchID=$_POST['BranchID'];
-  $Father=$_POST['Father'];
-  $Mother=$_POST['Mother'];
-  $Gender=$_POST['Gender'];
-  $Address=$_POST['Address'];
-  $Aadhar=$_POST['Aadhar'];
-  $Mobile=$_POST['Mobile'];
-  $lateral=$_POST['lateral'];
-  $Remark=$_POST['Remark'];
-  $Amount=$_POST['Amount'];
+if (isset($_POST['SaveLeave'])) {
+  $Description=$_POST['Description'];
+  $SDate=$_POST['SDate'];
+  $EDate=$_POST['EDate'];
 
-  $file_name = $_FILES['image']['name'];
-  $file_size =$_FILES['image']['size'];
-  $file_tmp =$_FILES['image']['tmp_name'];
-  $file_type=$_FILES['image']['type'];
-  $tmp = explode('.', $_FILES['image']['name']);
-  $file_ext = strtolower(end($tmp));    
-  $file=$Aadhar.".".$file_ext;         
-  $extensions= array("jpeg", "JPEG", "jpg", "JPG");
+  $query ="SELECT * FROM `staff` WHERE StaffID=$userid";
+  $result2 = mysqli_query($con, $query);
 
-  $errors='';
+  $sql = "INSERT INTO LeaveApplication (StaffID, Description, StartDate, EndDate, ApplyDate)
+  VALUES ($userid, '$Description', '$SDate', '$EDate', '$Date')";
 
-  if(in_array($file_ext,$extensions)=== false){
-    $errors ='<script>alert("File must be JPG or JPEG format")</script>';
-  }elseif($file_size > 2097152){
-    $errors ='<script>alert("File must be less than 2MB")</script>';
-  }elseif($file_size == 0){
-    $errors ='<script>alert("File must be less than 2MB")</script>';
-  }elseif(strlen((string)$Mobile<10)){
-    $errors='<script>alert("Mobile Number Must Be 10 Digit Long")</script>';
-  }
-
-  if (empty($errors)) {
-
-
-    if (empty($lateral)==true) {
-      $lateral=0;
-    }
-
-    $sql = "INSERT INTO students (StudentName, BranchID, Gender, FatherName, MotherName, AadharCardNo, MobileNo,  Address, LateralEntry, CourseAmount, Password, Remark, RegistrationDate, RegisteredByID )
-    VALUES ('$Name', $BranchID, '$Gender', '$Father', '$Mother', '$Aadhar', '$Mobile', '$Address', $lateral, $Amount, 'demo@123', '$Remark', '$Date', $userid)";
-
-    if ($con->query($sql) === TRUE) {
-      $Upload=move_uploaded_file($file_tmp,"student_pic/".$file);
-      echo '<script>alert("Student added successfully")</script>';
-      echo "<meta http-equiv='refresh' content='0'>";
-    } else {
-      echo "Error: " . $sql . "<br>" . $con->error;
-    }
-  }else{
-    echo $errors;
+  if ($con->query($sql) === TRUE) {
+    $Upload=move_uploaded_file($file_tmp,"student_pic/".$file);
+    echo '<script>alert("Student added successfully")</script>';
     echo "<meta http-equiv='refresh' content='0'>";
+  } else {
+    echo "Error: " . $sql . "<br>" . $con->error;
   }
+}else{
+  echo $errors;
+  echo "<meta http-equiv='refresh' content='0'>";
+}
 
 }
 
@@ -151,7 +118,7 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>ERP Admin</title>
+  <title>Home</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="../assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="../assets/vendors/css/vendor.bundle.base.css">
@@ -170,11 +137,11 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
   <link rel="shortcut icon" href="../assets/images/favicon.png" />
   <script src="../assets/js/sweetalert.min.js"></script>
   <style type="text/css">
-  input, textarea{
-    color: white;
-  }
+    input, textarea{
+      color: white;
+    }
 
-</style>
+  </style>
 </head>
 <body>
   <div class="container-scroller">
@@ -190,93 +157,8 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
       include"modals.php";
       ?>
       <div class="content-wrapper">
+
         <div class="row">
-          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-9">
-                    <div class="d-flex align-items-center align-self-start">
-                      <h3 class="mb-0"><?php echo $NoStudents; ?></h3>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <div class="icon icon-box-success ">
-                      <span class="mdi mdi-poll icon-item"></span>
-                    </div>
-                  </div>
-                </div>
-                <h6 class="text-muted font-weight-normal">Total Students</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-9">
-                    <div class="d-flex align-items-center align-self-start">
-                      <h3 class="mb-0"><?php echo $NoStaff; ?></h3>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <div class="icon icon-box-success">
-                      <span class="mdi mdi-poll icon-item"></span>
-                    </div>
-                  </div>
-                </div>
-                <h6 class="text-muted font-weight-normal">Total Staff</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-9">
-                    <div class="d-flex align-items-center align-self-start">
-                      <h3 class="mb-0"><i class="mdi mdi-currency-inr"></i><?php echo $PendingFees; ?></h3>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <div class="icon icon-box-success">
-                      <span class="mdi mdi-poll icon-item"></span>
-                    </div>
-                  </div>
-                </div>
-                <h6 class="text-muted font-weight-normal">Pending Fees</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-9">
-                    <div class="d-flex align-items-center align-self-start">
-                      <h3 class="mb-0"><i class="mdi mdi-currency-inr"></i> 15000</h3>
-                    </div>
-                  </div>
-                  <div class="col-3">
-                    <div class="icon icon-box-success ">
-                      <span class="mdi mdi-poll icon-item"></span>
-                    </div>
-                  </div>
-                </div>
-                <h6 class="text-muted font-weight-normal">Pending Salary</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Pending Fees</h4>
-                <canvas id="barChart" style="height:230px"></canvas>
-              </div>
-            </div>
-          </div>
 
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -292,11 +174,10 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
           <div class="col-12 grid-margin">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Staff Leave Status</h4>
+                <h4 class="card-title">Your Leave Status</h4>
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
-                      <th> Staff Name </th>
                       <th> Application No </th>
                       <th> Description </th>
                       <th> Duration </th>
@@ -308,10 +189,7 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
-                        <img src="assets/images/faces/face1.jpg" alt="image" />
-                        <span class="ps-2">HYZ</span>
-                      </td>
+                      <td>HYZ</td>
                       <td> 02312 </td>
                       <td>AAA BBB</td>
                       <td> 27-05-2022 to 28-05-2022 </td>
@@ -321,68 +199,9 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
                       <td>
                         <div class="badge badge-outline-success">Approved</div>
                       </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
+                      <td><button class="btn btn-danger"> Cancel</button></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face2.jpg" alt="image" />
-                        <span class="ps-2">Estella Bryan</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 1 </td>
-                      <td>
-                        <div class="badge badge-outline-warning">Pending</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face5.jpg" alt="image" />
-                        <span class="ps-2">Lucy Abbott</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 6 </td>
-                      <td>
-                        <div class="badge badge-outline-danger">Rejected</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face3.jpg" alt="image" />
-                        <span class="ps-2">Peter Gill</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 8 </td>
-                      <td>
-                        <div class="badge badge-outline-success">Approved</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face4.jpg" alt="image" />
-                        <span class="ps-2">Sallie Reyes</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 4 </td>
-                      <td>
-                        <div class="badge badge-outline-success">Approved</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
+                    
                   </tbody>
                 </table>
               </div>
@@ -392,18 +211,20 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
       </div>
       <div class="row">
         <div class="col-xl-6">
-          <h4>Recent Received Fees (10 Entries)</h4>
+          <h4>Your Salary of current year</h4>
           <div class="table-responsive">
             <table class="table">
               <thead>
                 <th>Sr No</th>
-                <th>Name</th>
-                <th>Class</th>
+                <th>Month</th>
+                <th>Release Date</th>
+                <th>Amount</th>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
                   <td class="text-right"> 1500 </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                   <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
@@ -411,46 +232,55 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
                   <td>2</td>
                   <td class="text-right"> 800 </td>
                   <td class="text-right font-weight-medium"> 33.25% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>3</td>
                   <td class="text-right"> 760 </td>
                   <td class="text-right font-weight-medium"> 15.45% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>4</td>
                   <td class="text-right"> 450 </td>
                   <td class="text-right font-weight-medium"> 25.00% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>5</td>
                   <td class="text-right"> 620 </td>
                   <td class="text-right font-weight-medium"> 10.25% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>6</td>
                   <td class="text-right"> 230 </td>
                   <td class="text-right font-weight-medium"> 75.00% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>7</td>
                   <td class="text-right"> 760 </td>
                   <td class="text-right font-weight-medium"> 15.45% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>8</td>
                   <td class="text-right"> 450 </td>
                   <td class="text-right font-weight-medium"> 25.00% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>9</td>
                   <td class="text-right"> 620 </td>
                   <td class="text-right font-weight-medium"> 10.25% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
                 <tr>
                   <td>10</td>
                   <td class="text-right"> 230 </td>
                   <td class="text-right font-weight-medium"> 75.00% </td>
+                  <td class="text-right font-weight-medium"> 56.35% </td>
                 </tr>
               </tbody>
             </table>
@@ -522,9 +352,9 @@ $PendingFeesBPharma=$row['sum(CourseAmount)']-$row['sum(ReceivedAmount)'];
           </div>
 
         </div>
-<script type="text/javascript">
-  var PendingBPharma=<?php echo $PendingFeesBPharma ?>
-</script>
+        <script type="text/javascript">
+          var PendingBPharma=<?php echo $PendingFeesBPharma ?>
+        </script>
 
         <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
         <!-- endinject -->

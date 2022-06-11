@@ -1,5 +1,10 @@
 <?php
 include ('connection.php');
+date_default_timezone_set('Asia/Calcutta');
+$timestamp =date('y-m-d H:i:s');
+$Date = date('Y-m-d',strtotime($timestamp));
+
+
 $subjectlist=!empty($_POST['subjectlist'])?$_POST['subjectlist']:'';
 if (!empty($subjectlist))
 {
@@ -43,6 +48,23 @@ if (!empty($BranchID))
     
 }
 
+$BranchIDS=!empty($_POST['BranchIDS'])?$_POST['BranchIDS']:'';
+if (!empty($BranchIDS))
+{
+    $StaffData="SELECT StaffID, StaffName from staff WHERE BranchID=$BranchIDS order by StaffName";
+    $result = mysqli_query($con,$StaffData);
+    if(mysqli_num_rows($result)>0)
+    {
+        echo "<option value=''>Select Staff</option>";
+        while ($arr=mysqli_fetch_assoc($result))
+        {
+            echo "<option value='".$arr['StaffID']."'>".$arr['StaffName']."</option><br>";
+        }
+    }
+    
+}
+
+
 $StudentID=!empty($_POST['StudentID'])?$_POST['StudentID']:'';
 if (!empty($StudentID))
 {
@@ -82,4 +104,26 @@ if (!empty($StaffID))
     }
     
 }
+
+
+$StaffIDD=!empty($_POST['StaffIDD'])?$_POST['StaffIDD']:'';
+if (!empty($StaffIDD))
+{
+    $query="SELECT * from salarydetails WHERE StaffID=$StaffIDD and (SalaryAmount-ReceivedAmount)>1";
+    $result = mysqli_query($con,$query);
+    if(mysqli_num_rows($result)>0)
+    {
+       while($row = mysqli_fetch_array($result)){
+           print "<tr>";
+           print '<td>'.$row['SalaryAmount']."</td>";
+           print '<td>'.date('M-Y',strtotime($row['SalaryOfMonth']))."</td>";
+           print '<td>'.$row['SalaryAmount']-$row['ReceivedAmount']."</td>";
+           print '<td><input style="color:white" type="number" class="form-control" id="'.$row['ID'].'" min="0"></td>';             
+           print '<td><button type="button" id2="'.$row['ID'].'" class="btn btn-primary SaveSalary">Release</button></td>';
+           print "</tr>";
+       }
+   }
+
+}
+
 ?>

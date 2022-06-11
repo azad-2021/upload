@@ -193,35 +193,60 @@
             <div class="row">
 
               <div class="col-lg-3">
-                <label for="recipient-name" class="col-form-label">Select Staff</label>
-                <select style="color:white" class="form-control" id="StaffIDS">
+                <label for="recipient-name" class="col-form-label">Select Course</label>
+                <select style="color:white" class="form-control" name="CIDAddSalary" id="CIDAddSalary" required="">
                   <option value="">Select</option>
                   <?php 
-                  $query ="SELECT * FROM staff WHERE Inservice=1";
+                  $query ="SELECT * FROM courses";
                   $result = mysqli_query($con, $query);
                   if (mysqli_num_rows($result)>0){
                     while($row=mysqli_fetch_assoc($result)){
-                      echo '<option value="'.$row['StaffID'].'">'.$row['StaffName'].'</option>';
+                      echo '<option value="'.$row['CourseID'].'">'.$row['Course'].'</option>';
                     }}?>
+                  </select>
+                </div>
+
+                <div class="col-lg-3">
+                  <label for="recipient-name" class="col-form-label">Select Branch</label>
+                  <select style="color:white" class="form-control" name="BIDAddSalary" id="BIDAddSalary" required="">
+                    <option value="">Select</option>
+                  </select>
+                </div>
+
+                <div class="col-lg-3">
+                  <label for="recipient-name" class="col-form-label">Select Staff</label>
+                  <select style="color:white" class="form-control" id="StaffIDS">
+                    <option value="">Select</option>
                   </select>
                 </div> 
                 <div class="col-lg-3">
                   <label for="recipient-name" class="col-form-label">Salary Amount</label>
                   <input style="color:white; background-color:black;" type="text" class="form-control" id="SalaryAmount" min="0" disabled="">
                 </div>
-                <div class="col-lg-3">
-                  <label for="recipient-name" class="col-form-label">Enter Amount</label>
-                  <input style="color:white" type="number" class="form-control" id="Salary" min="0">
-                </div>  
-                <div class="col-lg-3">
-                  <label for="recipient-name" class="col-form-label">Select Month</label>
-                  <input style="color:white" type="month" class="form-control" id="SalaryMonth">
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <!--
+                  <div class="col-lg-3">
+                    <label for="recipient-name" class="col-form-label">Enter Amount</label>
+                    <input style="color:white" type="number" class="form-control" id="Salary" min="0">
+                  </div>  
+                -->
               </form>
-              <button type="button" class="btn btn-primary SaveSalary">Save</button>
+            </div>
+            <div class="table-responsive" style="margin:20px;">
+              <table class="table table-hover table-bordered border-primary table-light">
+                <thead>
+                  <th>Salary Amount</th>
+                  <th>Month</th>
+                  <th>Pending Amount</th>
+                  <th>Release Amount</th>
+                  <th>Action</th>
+                </thead>
+                <tbody id="SalaryData">
+
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -278,18 +303,18 @@
                       <option value="4">IV</option>
                     </select>
                   </div>
-                  
+
                   <div class="col-lg-3">
                     <label for="recipient-name" class="col-form-label">Paid Amount</label>
                     <input style="color:white; margin-bottom:10px" type="number" class="form-control" id="FeesAmount" min="0">
                   </div>
-                  
+
                   <div class="col-lg-6">
                     <label for="recipient-name" class="col-form-label">Remark</label>
                     <textarea class="form-control" style="color: white;" id="RemarkFees"></textarea>
                   </div>
                 </div>
-                
+
                 <div class="modal-footer">
                   <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </form>
