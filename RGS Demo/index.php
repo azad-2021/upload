@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
 $Day = date('d',strtotime($timestamp));
-
+$TakenLeave=0;
 
 //echo $Date;
 if ($Day==1) {
@@ -58,6 +58,7 @@ if (isset($_POST['SaveStaff'])) {
   $Education=$_POST['StaffEducation'];
   $Email=$_POST['StaffEmail'];
   $Salary=$_POST['SalaryAmount'];
+  $BranchID=$_POST['BIDAddStaff'];
 
   $file_name = $_FILES['Resume']['name'];
   $file_size =$_FILES['Resume']['size'];
@@ -92,21 +93,42 @@ if (isset($_POST['SaveStaff'])) {
 
   if (empty($errors)) {
 
-    $sql = "INSERT INTO staff (StaffName, MobileNo, Email, AadharCardNo, Address, EducationDetails, Password, EntryDate, EntryByID, Gender, SalaryAmount)
-    VALUES ('$Name', $Mobile, '$Email', $Aadhar, '$Address', '$Education', 'ramanujan@123', '$Date', $userid, '$Gender', $Salary)";
+    $sql = "INSERT INTO staff (StaffName, MobileNo, Email, AadharCardNo, Address, EducationDetails, Password, EntryDate, EntryByID, Gender, SalaryAmount, BranchID)
+    VALUES ('$Name', $Mobile, '$Email', $Aadhar, '$Address', '$Education', 'demo@123', '$Date', $userid, '$Gender', $Salary, $BranchID)";
 
     if ($con->query($sql) === TRUE) {
+      $StaffID = $con->insert_id;
       $Upload=move_uploaded_file($file_tmp,"resume/".$Resume);
-      echo '<script>alert("Staff added successfully")</script>';
-      echo "<meta http-equiv='refresh' content='0'>";
-    } else {
+
+
+      $date = new DateTime('now');
+      $date->modify('last day of this month');
+      $d=$date->format('Y-m-d');
+      $d=date('Y-m-d', strtotime($d));
+      $lastdate=date_create($d);
+      $ldate= $lastdate->format('Y-m-d');
+      $interval = date_diff(date_create($Date), date_create($ldate));
+      $d= $interval->format('%R%a');
+      $int = (int)$d;     
+      $SalaryAmount=($Salary/30)*$int;
+
+      $sql = "INSERT INTO salarydetails (StaffID, SalaryOfMonth, SalaryAmount)
+      VALUES ($StaffID, '$Date', $SalaryAmount)";
+
+      if ($con->query($sql) === TRUE) {
+        echo '<script>alert("Staff added successfully")</script>';
+        echo "<meta http-equiv='refresh' content='0'>";
+      }else{
+        echo "Error: " . $sql . "<br>" . $con->error;
+      }
+
+    }else {
       echo "Error: " . $sql . "<br>" . $con->error;
     }
+
   }else{
     echo $errors;
   }
-
-
 }
 
 
@@ -226,11 +248,11 @@ $PendingSalary=array_sum($PendingSalaryArray);
   <link rel="shortcut icon" href="assets/images/favicon.png" />
   <script src="assets/js/sweetalert.min.js"></script>
   <style type="text/css">
-  input, textarea{
-    color: white;
-  }
+    input, textarea{
+      color: white;
+    }
 
-</style>
+  </style>
 </head>
 <body>
   <div class="container-scroller">
@@ -352,93 +374,50 @@ $PendingSalary=array_sum($PendingSalaryArray);
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
+                      <th>Sr. No</th>
                       <th> Staff Name </th>
                       <th> Application No </th>
                       <th> Description </th>
                       <th> Duration </th>
                       <th> Total Leave </th>    
-                      <th> Taken Leave </th>                      
+                      <th> Taken Leave </th>  
+                      <th>Apply Date</th>                    
                       <th> Status </th>
                       <th> Action </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face1.jpg" alt="image" />
-                        <span class="ps-2">HYZ</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 2 </td>
+                    <?php 
+                    $query="SELECT * from LeaveApplication 
+                    join staff on LeaveApplication.StaffID=staff.StaffID
+                    WHERE Inservice=1";
 
-                      <td>
-                        <div class="badge badge-outline-success">Approved</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face2.jpg" alt="image" />
-                        <span class="ps-2">Estella Bryan</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 1 </td>
-                      <td>
-                        <div class="badge badge-outline-warning">Pending</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face5.jpg" alt="image" />
-                        <span class="ps-2">Lucy Abbott</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 6 </td>
-                      <td>
-                        <div class="badge badge-outline-danger">Rejected</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face3.jpg" alt="image" />
-                        <span class="ps-2">Peter Gill</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 8 </td>
-                      <td>
-                        <div class="badge badge-outline-success">Approved</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <img src="assets/images/faces/face4.jpg" alt="image" />
-                        <span class="ps-2">Sallie Reyes</span>
-                      </td>
-                      <td> 02312 </td>
-                      <td>AAA BBB</td>
-                      <td> 27-05-2022 to 28-05-2022 </td>
-                      <td> 10 </td>
-                      <td> 4 </td>
-                      <td>
-                        <div class="badge badge-outline-success">Approved</div>
-                      </td>
-                      <td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>
-                    </tr>
+                    $result = mysqli_query($con, $query);
+                    if (mysqli_num_rows($result)>0){
+                      $Sr=0;
+                      while($row=mysqli_fetch_assoc($result)){
+                        if ($row['Status']==0) {
+                          $Status='<div class="badge badge-outline-warning">Pending</div>';
+                        }elseif($row['Status']==1){
+                          $Status='<div class="badge badge-outline-success">Approved</div>';
+                        }elseif($row['Status']==2){
+                          $Status='<div class="badge badge-outline-danger">Rejected</div>';
+                        }
+                        $Sr++;
+                        print "<tr>";
+                        print '<td>'.$Sr."</td>";
+                        print '<td>'.$row['StaffName']."</td>";
+                        print '<td>'.$row['ApplicationID']."</td>";
+                        print '<td>'.$row['Description']."</td>";
+                        print '<td>'.date('d-m-Y',strtotime($row['StartDate'])).' to '.date('d-m-Y',strtotime($row['EndDate']))."</td>";
+                        print '<td>'.$row['StaffLeave']."</td>";
+                        print '<td>'.$row['TakenLeave']."</td>";
+                        print '<td>'.$Status."</td>";
+                        print '<td>'.date('d-m-Y',strtotime($row['ApplyDate']))."</td>";
+                        print '<td><button class="btn btn-primary">Accept</button> <button class="btn btn-danger"> Reject</button></td>';
+                        print "</tr>";
+                      }
+                    }?>
                   </tbody>
                 </table>
               </div>
@@ -447,72 +426,8 @@ $PendingSalary=array_sum($PendingSalaryArray);
         </div>
       </div>
       <div class="row">
-        <div class="col-xl-6">
-          <h4>Recent Received Fees (10 Entries)</h4>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <th>Sr No</th>
-                <th>Name</th>
-                <th>Class</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td class="text-right"> 1500 </td>
-                  <td class="text-right font-weight-medium"> 56.35% </td>
-                </tr>
-                <tr>
 
-                  <td>2</td>
-                  <td class="text-right"> 800 </td>
-                  <td class="text-right font-weight-medium"> 33.25% </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td class="text-right"> 760 </td>
-                  <td class="text-right font-weight-medium"> 15.45% </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td class="text-right"> 450 </td>
-                  <td class="text-right font-weight-medium"> 25.00% </td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td class="text-right"> 620 </td>
-                  <td class="text-right font-weight-medium"> 10.25% </td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td class="text-right"> 230 </td>
-                  <td class="text-right font-weight-medium"> 75.00% </td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td class="text-right"> 760 </td>
-                  <td class="text-right font-weight-medium"> 15.45% </td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td class="text-right"> 450 </td>
-                  <td class="text-right font-weight-medium"> 25.00% </td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td class="text-right"> 620 </td>
-                  <td class="text-right font-weight-medium"> 10.25% </td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td class="text-right"> 230 </td>
-                  <td class="text-right font-weight-medium"> 75.00% </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-12 col-xl-6 grid-margin stretch-card">
+        <div class="col-md-12 col-xl-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">To do list</h4>
@@ -687,53 +602,7 @@ $PendingSalary=array_sum($PendingSalaryArray);
           });
 
 
-          $(document).on('change', '#StaffIDS', function(){
-            var StaffID=$(this).val();
-            console.log(StaffID);
-            if (StaffID) {
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'StaffID':StaffID},
-                success:function(result){
-                  document.getElementById("SalaryAmount").value=(result);
-                }
-              });
 
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'StaffIDD':StaffID},
-                success:function(result){
-                  $('#SalaryData').html(result);
-                }
-              });
-
-            }
-          });
-
-          $(document).on('click', '.SaveSalary', function(){
-            var Salary = document.getElementById("Salary").value;
-            var StaffID= document.getElementById("StaffIDS").value;
-            var Month = document.getElementById("SalaryMonth").value;
-            var Amount = document.getElementById("SalaryAmount").value;
-            console.log(Month);
-            if (StaffID!='' && Salary !='' && Month!='' && Amount!='') {
-              $.ajax({
-                type:'POST',
-                url:'insert.php',
-                data:{'SalaryAmount':Amount, 'Salary':Salary, 'Month':Month, 'StaffID':StaffID},
-                success:function(result){
-                  swal("success","Salary Updated","success"); 
-                  $('#re').html(result);
-                  $('#AddSalary').modal('hide');
-                  $('#SalaryForm').trigger("reset");
-                }
-              });
-            }else{
-              swal("error","Please enter all fields","error");
-            }
-          });
 
 
           $(document).on('change', '#CourseID', function(){
@@ -773,7 +642,7 @@ $PendingSalary=array_sum($PendingSalaryArray);
           });
 
 
-          $(document).on('change', '#CIDAddSalary', function(){
+          $(document).on('change', '#CIDAddStaff', function(){
             var CourseID= $(this).val();
 
             if(CourseID){
@@ -782,38 +651,131 @@ $PendingSalary=array_sum($PendingSalaryArray);
                 url:'search.php',
                 data:{'CourseIDF':CourseID},
                 success:function(result){
-                  $('#BIDAddSalary').html(result);
+                  $('#BIDAddStaff').html(result);
                 }
               }); 
             }else{
-              $('#BIDAddSalary').html('<option value="">Branch</option>'); 
+              $('#BIDAddStaff').html('<option value="">Branch</option>'); 
             }
 
           });
 
-          $(document).on('change', '#BIDAddSalary', function(){
-            var BranchID= $(this).val();
 
-            if(BranchID){
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'BranchIDS':BranchID},
-                success:function(result){
-                  $('#StaffIDS').html(result);
-                }
-              }); 
-            }else{
-              $('#StaffIDS').html('<option value="">Staff</option>'); 
-            }
+//salary
 
-          });
+$(document).on('change', '#CIDAddSalary', function(){
+  var CourseID= $(this).val();
 
-        </script>
+  if(CourseID){
+    $.ajax({
+      type:'POST',
+      url:'search.php',
+      data:{'CourseIDF':CourseID},
+      success:function(result){
+        $('#BIDAddSalary').html(result);
+      }
+    }); 
+  }else{
+    $('#BIDAddSalary').html('<option value="">Branch</option>'); 
+  }
 
-      </body>
-      </html>
+});
 
-      <?php
-      echo $PendingSalary;
-      $con->close(); ?>
+
+$(document).on('change', '#BIDAddSalary', function(){
+  var BranchID=$(this).val();
+  
+  if (BranchID) {
+    $.ajax({
+      type:'POST',
+      url:'read.php',
+      data:{'BranchIDS':BranchID},
+      success:function(result){
+        $('#StaffIDS').html(result);
+      }
+    });
+
+  }else{
+    $('#StaffIDS').html('<option value="">Staff</option>'); 
+  }
+});
+
+
+$(document).on('change', '#StaffIDS', function(){
+  var StaffID=$(this).val();
+  console.log(StaffID);
+  if (StaffID) {
+    $.ajax({
+      type:'POST',
+      url:'read.php',
+      data:{'StaffID':StaffID},
+      success:function(result){
+        document.getElementById("SalaryAmount").value=(result);
+      }
+    });
+
+    $.ajax({
+      type:'POST',
+      url:'read.php',
+      data:{'StaffIDD':StaffID},
+      success:function(result){
+        $('#SalaryData').html(result);
+      }
+    });
+
+  }
+});
+
+
+$(document).on('click', '.SaveSalary', function(){
+
+  var SID=$(this).attr("id2");
+  var Salary = document.getElementById(SID).value;
+  console.log(Salary);
+  var StaffID= document.getElementById("StaffIDS").value;
+  if (Salary) {
+    $.ajax({
+      type:'POST',
+      url:'insert.php',
+      data:{'SalaryAmount':Salary, 'SID':SID},
+      success:function(result){
+        swal("success","Salary Updated","success"); 
+      }
+    });
+
+    var delayInMilliseconds = 1000; 
+
+    setTimeout(function() {
+     $.ajax({
+      type:'POST',
+      url:'read.php',
+      data:{'StaffIDD':StaffID},
+      success:function(result){
+        $('#SalaryData').html(result);
+      }
+    });
+   }, delayInMilliseconds);
+
+  }else{
+    swal("error","Please enter salary release amount","error");
+  }
+});
+
+ $(document).on('click', '.cl', function(){
+
+  var delayInMilliseconds = 1000; 
+
+  setTimeout(function() {
+    location.reload();
+  }, delayInMilliseconds);
+
+
+});
+</script>
+
+</body>
+</html>
+
+<?php
+echo $PendingSalary;
+$con->close(); ?>

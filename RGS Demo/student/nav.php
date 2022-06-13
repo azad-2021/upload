@@ -30,24 +30,16 @@
             <span class="menu-title">Dashboard</span>
           </a>
         </li>
-
+        <!--
         <li class="nav-item menu-items">
-          <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#ApplyLeave">
+          <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#regstration">
             <span class="menu-icon">
               <i class="mdi mdi-chart-bar"></i>
             </span>
-            <span class="menu-title">Apply for Leave</span>
+            <span class="menu-title">Registration</span>
           </a>
         </li>
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="studentlist.php">
-            <span class="menu-icon">
-              <i class="mdi mdi-playlist-play"></i>
-            </span>
-            <span class="menu-title">Student Attendance</span>
-          </a>
-        </li>
+      -->
       </ul>
     </nav>
     <!-- partial -->
