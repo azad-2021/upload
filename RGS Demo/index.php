@@ -1,12 +1,23 @@
 <?php 
 
 include"connection.php";
-
+include"session.php";
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
 $Date = date('Y-m-d',strtotime($timestamp));
 $Day = date('d',strtotime($timestamp));
+$userid=$_SESSION['userid'];
 $TakenLeave=0;
+
+$Hour = date('G');
+
+if ( $Hour >= 1 && $Hour <= 11 ) {
+  $wish= "Good Morning ".$_SESSION['user'];
+} else if ( $Hour >= 12 && $Hour <= 15 ) {
+  $wish= "Good Afternoon ".$_SESSION['user'];
+} else if ( $Hour >= 19 || $Hour <= 23 ) {
+  $wish= "Good Evening ".$_SESSION['user'];
+}
 
 //echo $Date;
 if ($Day==1) {
@@ -45,9 +56,6 @@ if ($Day==1) {
   }
 }
 
-
-
-$userid=1;
 
 if (isset($_POST['SaveStaff'])) {
   $Name=$_POST['StaffName'];
