@@ -36,12 +36,27 @@ if ($TotalWorking==0) {
   $Attendance=0;
 }else{
   $Attendance=($Present/$TotalWorking)*100;
+  $Attendance=number_format((float)$Attendance, 2, '.', '');
 }
 $query ="SELECT * FROM students WHERE StudentID=$userid";
 $result = mysqli_query($con, $query);
 $row=mysqli_fetch_assoc($result);
 $TotalFees=$row['CourseAmount'];
 $PendingFees=$row['CourseAmount']-$row['ReceivedAmount'];
+
+$AtData=array();
+$AtDate=array();
+$query ="SELECT AttendanceStatus, `Date` FROM u241098585_college_demo.attendencedetails WHERE StudentID=$userid order by `Date` desc Limit 7";
+$result = mysqli_query($con, $query);
+if (mysqli_num_rows($result)>0)
+{   
+
+  while ($row=mysqli_fetch_assoc($result))
+  {
+    $AtData[]=$row['AttendanceStatus'];
+    $AtDate[]=date('d-M-Y',strtotime($row['Date']));
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -69,11 +84,11 @@ $PendingFees=$row['CourseAmount']-$row['ReceivedAmount'];
   <link rel="shortcut icon" href="../assets/images/favicon.png" />
   <script src="../assets/js/sweetalert.min.js"></script>
   <style type="text/css">
-  input, textarea{
-    color: white;
-  }
+    input, textarea{
+      color: white;
+    }
 
-</style>
+  </style>
 </head>
 <body>
   <div class="container-scroller">
@@ -150,6 +165,19 @@ $PendingFees=$row['CourseAmount']-$row['ReceivedAmount'];
           </div>
         </div>
 
+
+        <div class="row">
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Your Attendance (Last 7 days)</h4>
+                <canvas id="PercentageAttandance" style="height:230px"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <div class="row">
           <div class="col-xl-12">
             <h4>Fees Status</h4>
@@ -204,7 +232,10 @@ $PendingFees=$row['CourseAmount']-$row['ReceivedAmount'];
       </div>
 
     </div>
-
+    <script type="text/javascript">
+      var AtDate= <?php print_r(json_encode($AtDate)); ?>;
+      var AtData= <?php print_r(json_encode($AtData)); ?>;
+    </script>
     <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->

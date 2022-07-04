@@ -1,3 +1,17 @@
+    <?php 
+    $query ="SELECT * FROM coordinators WHERE StaffID=$userid";
+    $result = mysqli_query($con, $query);
+    if (mysqli_num_rows($result)>0)
+    {   
+      $row=mysqli_fetch_assoc($result);
+      $Year=$row['Year'];
+    }else{
+      $Year=0;
+      $NoStudents=0;
+    }
+
+    ?>
+
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
@@ -39,8 +53,11 @@
             <span class="menu-title">Apply for Leave</span>
           </a>
         </li>
+        <?php 
+        if ($Year>0) {
 
-        <li class="nav-item menu-items">
+         ?>
+         <li class="nav-item menu-items">
           <a class="nav-link" href="studentlist.php">
             <span class="menu-icon">
               <i class="mdi mdi-playlist-play"></i>
@@ -48,6 +65,7 @@
             <span class="menu-title">Student Attendance</span>
           </a>
         </li>
+      <?php }?>
       </ul>
     </nav>
     <!-- partial -->
@@ -85,7 +103,7 @@
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                 <h6 class="p-3 mb-0">Profile</h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a class="dropdown-item preview-item" href="profile.php">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-settings text-success"></i>

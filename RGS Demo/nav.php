@@ -42,7 +42,7 @@
             <ul class="nav flex-column sub-menu">
               <li class="nav-item"> <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#Registration">Student</a></li>
               <li class="nav-item"> <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#AddStaff">Staff</a></li>
-              
+              <li class="nav-item"> <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#Coordinator">Add Coordinator</a></li>
             </ul>
           </div>
         </li>
