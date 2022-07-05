@@ -36,7 +36,9 @@ if (isset($_POST['SaveLeave'])) {
     $d= $interval->format('%R%a');
     $int = (int)$d;   
     $TakenLeave=$int+$Taken;
-
+    if ($TakenLeave==0) {
+      $TakenLeave=1;
+    }
     $sql = "UPDATE staff SET TakenLeave=$TakenLeave WHERE StaffID=$userid";
     if ($con->query($sql) === TRUE) {
 
@@ -94,11 +96,11 @@ $PendingSalary=$row['sum(SalaryAmount)']-$row['sum(ReceivedAmount)'];
   <link rel="shortcut icon" href="../assets/images/favicon.png" />
   <script src="../assets/js/sweetalert.min.js"></script>
   <style type="text/css">
-    input, textarea{
-      color: white;
-    }
+  input, textarea{
+    color: white;
+  }
 
-  </style>
+</style>
 </head>
 <body>
   <div class="container-scroller">
@@ -350,192 +352,10 @@ $PendingSalary=$row['sum(SalaryAmount)']-$row['sum(ReceivedAmount)'];
         <!-- Custom js for this page -->
         <script src="../assets/js/dashboard.js"></script>
         <!-- End custom js for this page -->
-
+        <script src="ajax.js"></script>
         <script type="text/javascript">
-          $(document).on('click', '.SaveSubject', function(){
-            var subject = document.getElementById("subject").value;
-            var ClassID= document.getElementById("SubClass").value;
-            if (subject!='' && ClassID !='') {
-              $.ajax({
-                type:'POST',
-                url:'insert.php',
-                data:{'subject':subject, 'ClassID':ClassID},
-                success:function(data){
-                  swal("success","Subject added","success"); 
-                  $('#AddSubject').modal('hide');
-                  $('#Fsubject').trigger("reset");
-                }
-              });
-            }
-          });
-
-          $(document).on('click', '.sublist', function(){
-            $.ajax({
-              type:'POST',
-              url:'read.php',
-              data:{'subjectlist':'subjectlist'},
-              success:function(result){
-                $('#sublist').html(result);
-              }
-            });
-          });
 
 
-
-          $(document).on('change', '#BranchIDF', function(){
-            var BranchID=$(this).val();
-            console.log(BranchID);
-            if (BranchID) {
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'BranchID':BranchID},
-                success:function(result){
-                  $('#FeesStudent').html(result);
-                }
-              });
-            }else{
-              $('#FeesStudent').html('<option value="">No Students</option>'); 
-            }
-          });
-
-
-          $(document).on('change', '#FeesStudent', function(){
-            var StudentID=$(this).val();
-            console.log(StudentID);
-            if (StudentID) {
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'StudentID':StudentID},
-                success:function(result){
-                  var r = (result);
-                  //document.getElementById("TotalAmount").disabled = false;
-                  document.getElementById("TotalAmount").value = r;
-                  //document.getElementById("TotalAmount").disabled = true;
-                }
-              });
-            }
-          });
-
-
-          $(document).on('click', '.SaveFees', function(){
-            var BranchID=document.getElementById("BranchIDF").value;
-            var TotalAmount = document.getElementById("TotalAmount").value;
-            var StudentID= document.getElementById("FeesStudent").value;
-            var Year = document.getElementById("year").value;
-            var ReceivedAmount=document.getElementById("FeesAmount").value;
-            var Remark=document.getElementById("RemarkFees").value;
-
-
-            if (StudentID!='' && BranchID !='' && TotalAmount!='' && ReceivedAmount!='' && Year!='' && Remark!='') {
-              $.ajax({
-                type:'POST',
-                url:'insert.php',
-                data:{'TotalAmount':TotalAmount, 'ReceivedAmount':ReceivedAmount, 'Year':Year, 'StudentID':StudentID, 'BranchID':BranchID, 'Remark':Remark},
-                success:function(result){
-                  swal("success","Fees Updated","success"); 
-                  $('#re').html(result);
-                  $('#AddFees').modal('hide');
-                  $('#FeesForm').trigger("reset");
-                }
-              });
-            }else{
-              swal("error","Please enter all fields","error");
-            }
-          });
-
-
-          $(document).on('click', '.SearchStudent', function(){
-            var Name = document.getElementById("FStudentName").value;
-            if (Name) {
-              $.ajax({
-                type:'POST',
-                url:'search.php',
-                data:{'StudentName':Name},
-                success:function(result){
-                  $('#StudentData').html(result);
-                  $('#StudentDetails').modal('show');
-                }
-              });
-            }
-          });
-
-
-          $(document).on('change', '#StaffIDS', function(){
-            var StaffID=$(this).val();
-            console.log(StaffID);
-            if (StaffID) {
-              $.ajax({
-                type:'POST',
-                url:'read.php',
-                data:{'StaffID':StaffID},
-                success:function(result){
-                  document.getElementById("SalaryAmount").value=(result);
-                }
-              });
-            }
-          });
-
-          $(document).on('click', '.SaveSalary', function(){
-            var Salary = document.getElementById("Salary").value;
-            var StaffID= document.getElementById("StaffIDS").value;
-            var Month = document.getElementById("SalaryMonth").value;
-            var Amount = document.getElementById("SalaryAmount").value;
-            console.log(Month);
-            if (StaffID!='' && Salary !='' && Month!='' && Amount!='') {
-              $.ajax({
-                type:'POST',
-                url:'insert.php',
-                data:{'SalaryAmount':Amount, 'Salary':Salary, 'Month':Month, 'StaffID':StaffID},
-                success:function(result){
-                  swal("success","Salary Updated","success"); 
-                  $('#re').html(result);
-                  $('#AddSalary').modal('hide');
-                  $('#SalaryForm').trigger("reset");
-                }
-              });
-            }else{
-              swal("error","Please enter all fields","error");
-            }
-          });
-
-
-          $(document).on('change', '#CourseID', function(){
-            var CourseID= $(this).val();
-
-            if(CourseID){
-              $.ajax({
-                type:'POST',
-                url:'search.php',
-                data:{'CourseID':CourseID},
-                success:function(result){
-                  $('#BranchID').html(result);
-                }
-              }); 
-            }else{
-              $('#BranchID').html('<option value="">Branch</option>'); 
-            }
-
-          });
-
-          $(document).on('change', '#CourseIDF', function(){
-            var CourseID= $(this).val();
-
-            if(CourseID){
-              $.ajax({
-                type:'POST',
-                url:'search.php',
-                data:{'CourseIDF':CourseID},
-                success:function(result){
-                  $('#BranchIDF').html(result);
-                }
-              }); 
-            }else{
-              $('#BranchIDF').html('<option value="">Branch</option>'); 
-            }
-
-          });
 
         </script>
 

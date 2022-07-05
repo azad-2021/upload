@@ -157,7 +157,7 @@
     </div>
   </div>
 
-  <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+  <script src="../assets/vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
   <script src="../assets/vendors/progressbar.js/progressbar.min.js"></script>
@@ -176,81 +176,8 @@
   <!-- endinject -->
   <!-- Custom js for this page -->
   <script src="../assets/js/dashboard.js"></script>
-
+  <script src="ajax.js"></script>
   <script type="text/javascript">
-
-    $(document).ready(function() {
-      $('#example').DataTable({
-        searchPanes: {
-          layout: 'columns-6'
-        },
-        dom: 'Plfrtip',
-        columnDefs: [
-        {
-          searchPanes: {
-            show: true
-          },
-          targets: [3, 4, 5,9,10,12]
-        }
-        ]
-      });
-    });
-
-    $(document).on('change', '#CourseIDSt', function(){
-      var CourseID= $(this).val();
-      console.log(CourseID);
-      if(CourseID){
-        $.ajax({
-          type:'POST',
-          url:'search.php',
-          data:{'CourseID':CourseID},
-          success:function(result){
-            $('#BranchIDSt').html(result);
-          }
-        }); 
-      }else{
-        $('#BranchIDSt').html('<option value="">Branch</option>'); 
-      }
-
-    });
-
-    $(document).on('change', '#BranchIDSt', function(){
-      var BranchID= $(this).val();
-
-      if(BranchID){
-        $.ajax({
-          type:'POST',
-          url:'read.php',
-          data:{'BranchIDSt':BranchID},
-          success:function(result){
-            $('#StudentData').html(result);
-          }
-        }); 
-      }
-
-    });
-
-
-
-    $(document).on('click', '.FeesDetails', function(){
-
-      var StudentID=$(this).attr("id");
-      var delayInMilliseconds = 1000; 
-
-      setTimeout(function() {
-        if (StudentID) {
-          $.ajax({
-            type:'POST',
-            url:'read.php',
-            data:{'StudentIDFees':StudentID},
-            success:function(result){
-              $('#FeesData').html(result);
-            }
-          });
-        }
-      }, delayInMilliseconds)
-    });
-
 
 
   </script>
