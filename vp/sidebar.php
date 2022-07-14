@@ -60,12 +60,7 @@
           <use xlink:href="#survey-1"> </use>
         </svg>Purchase Entry</a>
       </li>
-      <li class="sidebar-item"><a class="sidebar-link" href="charts.html"> 
-        <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
-          <use xlink:href="#sales-up-1"> </use>
-        </svg>Add Enterprise</a>
-      </li>
-      <li class="sidebar-item"><a class="sidebar-link" href="tables.html"> 
+      <li class="sidebar-item"><a class="sidebar-link" href="itemlist.php"> 
         <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
           <use xlink:href="#portfolio-grid-1"> </use>
         </svg>All items</a>

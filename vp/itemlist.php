@@ -12,6 +12,11 @@ $Date = date('Y-m-d',strtotime($timestamp));
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Home</title>
   <?php include "header.php"; ?>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 </head>
 <body>
 
@@ -21,133 +26,90 @@ $Date = date('Y-m-d',strtotime($timestamp));
 
   <section class="py-5">
     <div class="container-fluid">
-
       <!-- modals -->
       <?php include "modals.php"; ?>
       <!-- modal closed -->
-
-      <div class="row">
-        <!-- Count item widget-->
-        <div class="col-xl-2 col-md-4 col-6 gy-4 gy-xl-0">
-          <div class="d-flex">
-            <svg class="svg-icon svg-icon-sm svg-icon-heavy text-primary mt-1 flex-shrink-0">
-              <use xlink:href="#numbers-1"> </use>
-            </svg>
-            <div class="ms-2">
-              <h3 class="h4 text-dark text-uppercase fw-normal">Today Billing</h3>
-              <p class="text-gray-500 small"></p>
-              <p class="display-6 mb-0">123</p>
-            </div>
-          </div>
-        </div>
-        <!-- Count item widget-->
-        <div class="col-xl-2 col-md-4 col-6 gy-4 gy-xl-0">
-          <div class="d-flex">
-            <svg class="svg-icon svg-icon-sm svg-icon-heavy text-primary mt-1 flex-shrink-0">
-              <use xlink:href="#numbers-1"> </use>
-            </svg>
-            <div class="ms-2">
-              <h3 class="h4 text-dark text-uppercase fw-normal">Total Billing</h3>
-              <p class="text-gray-500 small"></p>
-              <p class="display-6 mb-0">123</p>
-            </div>
-          </div>
-        </div>
-        <!-- Count item widget-->
-        <div class="col-xl-3 col-md-4 col-6 gy-4 gy-xl-0">
-          <div class="d-flex">
-            <svg class="svg-icon svg-icon-sm svg-icon-heavy text-primary mt-1 flex-shrink-0">
-              <use xlink:href="#literature-1"> </use>
-            </svg>
-            <div class="ms-2">
-              <h3 class="h4 text-dark text-uppercase fw-normal">Total items in stock</h3>
-              <p class="text-gray-500 small"></p>
-              <p class="display-6 mb-0">92</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Count item widget-->
-        <div class="col-xl-3 col-md-4 col-6 gy-4 gy-xl-0">
-          <div class="d-flex">
-            <svg class="svg-icon svg-icon-sm svg-icon-heavy text-primary mt-1 flex-shrink-0">
-              <use xlink:href="#literature-1"> </use>
-            </svg>
-            <div class="ms-2">
-              <h3 class="h4 text-dark text-uppercase fw-normal">Income current month</h3>
-              <p class="text-gray-500 small"></p>
-              <p class="display-6 mb-0">92</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Count item widget-->
-        <div class="col-xl-2 col-md-4 col-6 gy-4 gy-xl-0">
-          <div class="d-flex">
-            <svg class="svg-icon svg-icon-sm svg-icon-heavy text-primary mt-1 flex-shrink-0">
-              <use xlink:href="#literature-1"> </use>
-            </svg>
-            <div class="ms-2">
-              <h3 class="h4 text-dark text-uppercase fw-normal">Total income</h3>
-              <p class="text-gray-500 small"></p>
-              <p class="display-6 mb-0">92</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
   </section>
   <!-- Header Section-->
   <section class="bg-white py-5">
     <div class="container-fluid">
       <div class="row d-flex align-items-md-stretch">
-        <!-- Line Chart -->
-        <div class="col-lg-12 col-md-12">
-          <div class="card shadow-0">
-            <h2 class="h3 fw-normal">Sales marketing report</h2>
-            <p class="text-sm text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor amet officiis</p>
-            <canvas id="lineCahrt"></canvas>
-          </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered border-primary" id="example">
+            <thead>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>In stock</th>
+              <th>Expiry Date</th>
+              <th>Purchase From</th>
+              <th>Purchase Amount</th>
+              <th>Purchase Discount</th>
+              <th>Selling Rate</th>
+              <th>Purchase Date</th>
+            </thead>
+            <tbody id="">
+              <?php 
+
+              $query="SELECT * FROM `purchase` 
+              JOIN items on purchase.ItemID=items.ItemID
+              JOIN sellers ON purchase.SellerID=sellers.SellerID
+              join category on items.CategoryID=category.CategoryID";
+              $result = mysqli_query($con,$query);
+              if(mysqli_num_rows($result)>0)
+              {
+
+                $Sr=1;
+                while ($row=mysqli_fetch_assoc($result))
+                {
+                  print "<tr>";
+                  print '<td>'.$row['ItemName']."</td>";
+                  print '<td>'.$row['Category']."</td>";
+                  print '<td>0</td>';
+                  print '<td>'.$row['ExpiryDate']."</td>";
+                  print '<td>'.$row['SellerName']."</td>";
+                  print '<td>'.$row['PaidAmount']."</td>";
+                  print '<td>'.$row['Discount']."</td>";
+                  print '<td>'.$row['SellingRate']."</td>";
+                  print '<td>'.$row['PurchaseDate']."</td>";
+
+                  print "<tr>";  
+                }
+
+
+              }
+
+              ?>
+            </tbody>
+          </table>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="bg-white py-5">
-    <div class="container-fluid">
-      <div class="row d-flex align-items-md-stretch">
+    <?php include "footer.php"; 
+
+    ?>
+
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/staterestore/1.0.1/js/dataTables.stateRestore.min.js"></script>
+
+    <script src="https://cdn.datatables.net/searchpanes/2.0.1/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+    <script type="text/javascript">
 
 
-        <!-- Line Chart -->
-        <div class="col-lg-12 col-md-12">
-          <div class="card shadow-0">
-            <h2 class="h3 fw-normal">Item less than 25 in stock</h2>                       
-            <canvas id="lineCahrt"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      $(document).ready(function() {
+       var table = $('#example').DataTable( {
+        rowReorder: {
+          selector: 'td:nth-child(2)'
+        },
 
-  <section class="bg-white py-5">
-    <div class="container-fluid">
-      <div class="row d-flex align-items-md-stretch">
+        "lengthMenu": [[10, 50, 100, -1], [10, 25, 50, "All"]],
+        responsive: true
 
-        <!-- Line Chart -->
-        <div class="col-lg-12 col-md-12">
-          <div class="card shadow-0">
-            <h2 class="h3 fw-normal">Item about to expire</h2>
-            <canvas id="lineCahrt"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <?php include "footer.php"; 
-
-  ?>
-  <script type="text/javascript">
+      } );
+     } );
 
 /*
     $.ajax({
@@ -426,7 +388,16 @@ $Date = date('Y-m-d',strtotime($timestamp));
     }
     
   });
-
+  $(document).ready(function(){
+/*
+    var Page="read.php";
+    var Modal='NA';
+    var Form='NA';
+    var Result='#PurchaseDataList';
+    var data={'ItemList':'ItemList'};
+    AjaxRead(Page, data, Modal, Form, Result);
+    */
+  } );
 </script>
 </body>
 </html>

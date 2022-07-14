@@ -20,9 +20,9 @@
 <script src="js/charts-home.js"></script>
 <!-- Main File-->
 <script src="js/front.js"></script>
-<script>
 
 
+<script type="text/javascript">
   function injectSvgSprite(path) {
 
     var ajax = new XMLHttpRequest();
@@ -35,13 +35,16 @@
       document.body.insertBefore(div, document.body.childNodes[0]);
     }
   }
-  // this is set to BootstrapTemple website as you cannot 
-  // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
-  // while using file:// protocol
-  // pls don't forget to change to your domain :)
-  injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
+// this is set to BootstrapTemple website as you cannot 
+// inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+// while using file:// protocol
+// pls don't forget to change to your domain :)
+injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
 </script>
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-<?php $con->close(); ?>
+<?php 
+include "js-php.php";
+$con->close(); 
+?>
