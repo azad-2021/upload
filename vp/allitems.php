@@ -12,25 +12,7 @@ $Date = date('Y-m-d',strtotime($timestamp));
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Items</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="all,follow">
-  <!-- Google fonts - Roboto -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-  <!-- Choices CSS-->
-  <link rel="stylesheet" href="vendor/choices.js/public/assets/styles/choices.min.css">
-  <!-- Custom Scrollbar-->
-  <link rel="stylesheet" href="vendor/overlayscrollbars/css/OverlayScrollbars.min.css">
-  <!-- theme stylesheet-->
-  <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
-  <!-- Custom stylesheet - for your changes-->
-  <link rel="stylesheet" href="css/custom.css">
-  <!-- Favicon-->
-  <link rel="shortcut icon" href="img/favicon.ico">
-
-  <script src="js/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+  <?php include "header.php"; ?>
 
 </head>
 <body>
@@ -47,26 +29,21 @@ $Date = date('Y-m-d',strtotime($timestamp));
       <!-- modal closed -->
 
       <div class="table-responsive">
-        <table class="table table-hover table-bordered border-primary" id="example">
+        <table class="table table-hover table-bordered border-primary" id="example" width="100%">
           <thead>
             <th>Item Name</th>
             <th>Category</th>
-            <th>In stock</th>
-            <th>Expiry Date</th>
-            <th>Purchase From</th>
-            <th>Purchase Amount</th>
-            <th>Purchase Discount</th>
-            <th>Selling Rate</th>
-            <th>Purchase Date</th>
+            <th>Rate</th>
+            <th>Updated On</th>
+            <th>Updated By</th>
+            <th>Change Category</th>
           </thead>
           <tbody id="">
             <?php 
 
-            $query="SELECT * FROM `purchase` 
-            JOIN items on purchase.ItemID=items.ItemID
-            JOIN sellers ON purchase.SellerID=sellers.SellerID
+            $query="SELECT * FROM items
             join category on items.CategoryID=category.CategoryID
-            WHERE (Qty-SaledQty)>0";
+            join user on items.UpdatedByID=user.UserID";
             $result = mysqli_query($con,$query);
             if(mysqli_num_rows($result)>0)
             {
@@ -77,13 +54,24 @@ $Date = date('Y-m-d',strtotime($timestamp));
                 print "<tr>";
                 print '<td>'.$row['ItemName']."</td>";
                 print '<td>'.$row['Category']."</td>";
-                print '<td>'.$row['Qty']-$row['SaledQty'].'</td>';
-                print '<td><span class="d-none">'.$row['ExpiryDate'].'</span>'.date('d-M-Y',strtotime($row['ExpiryDate']))."</td>";
-                print '<td>'.$row['SellerName']."</td>";
-                print '<td>'.$row['PaidAmount']."</td>";
-                print '<td>'.$row['Discount']."</td>";
                 print '<td>'.$row['SellingRate']."</td>";
-                print '<td><span class="d-none">'.$row['PurchaseDate'].'</span>'.date('d-M-Y',strtotime($row['PurchaseDate']))."</td>";
+                print '<td><span class="d-none">'.$row['UpdatedDate'].'</span>'.date('d-M-Y',strtotime($row['UpdatedDate']))."</td>";
+                print '<td>'.$row['UserName']."</td>";
+                print '<td>
+                <select class="form-control" id="ChanageCategory" id2="'.$row['ItemID'].'">';
+                print '<option value="">Select</option>';
+                $query="SELECT * from category order by Category";
+                $result1 = mysqli_query($con,$query);
+                if(mysqli_num_rows($result1)>0)
+                {
+                  while ($row1=mysqli_fetch_assoc($result1))
+                  {
+                    echo "<option value='".$row1['CategoryID']."'>".$row1['Category']."</option><br>";
+                  }
+                }
+
+                print '</select>
+                </td>';
                 print "</tr>";  
               }
 
@@ -147,7 +135,36 @@ $Date = date('Y-m-d',strtotime($timestamp));
       // pls don't forget to change to your domain :)
       injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
       
-      
+
+      $(document).on('change', '#ChanageCategory', function(){
+
+        var CategoryID=$(this).val();
+        var ItemID = $(this).attr("id2");
+
+        if (CategoryID && ItemID) {
+          if (confirm("You want to change Category. Do you wish to continue?")) {
+            $.ajax({
+             url:"insert.php",
+             method:"POST",
+             data:{'CategoryIDChange':CategoryID, 'ItemIDC':ItemID},
+             success:function(result){
+              if((result)==1){
+                SuccessAlert('Category Changed');
+              }else{
+
+                Swal.fire({
+                  title: 'Error!',
+                  text: (result),
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+                })
+
+              }
+            }
+          });
+          }
+        }
+      });
     </script>
     <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">

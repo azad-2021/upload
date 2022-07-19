@@ -1,7 +1,8 @@
 <?php 
-include "connection.php";
 
-$userid=1;
+include "connection.php";
+include "session.php";
+$userid=$_SESSION['userid'];
 
 date_default_timezone_set('Asia/Calcutta');
 $timestamp =date('y-m-d H:i:s');
@@ -11,10 +12,10 @@ $m=date('m',strtotime($timestamp));
 $y=date('y',strtotime($timestamp));
 
 if ($m<=3) {
-  $FY=($y-1).'-'.$y;
+	$FY=($y-1).$y;
 
 }else{
-  $FY=$y.'-'.($y+1);
+	$FY=$y.($y+1);
 }
 
 
@@ -111,14 +112,14 @@ if (!empty($NewItem))
 
 
 	if ($err==0) {
-		
+
 		for ($i=0; $i < count($NewItem) ; $i++) { 
 
 			$sql = "INSERT INTO items (ItemName, SellingRate, CategoryID, UpdatedDate, UpdatedByID)
 			VALUES ('$NewItem[$i]', $SellingRate[$i], $Category[$i], '$Date', $userid)";
 
 			if ($con->query($sql) === TRUE) {
-				
+
 			} else {
 				echo "Error: " . $sql . "<br>" . $con->error;
 				$err=1;
@@ -146,7 +147,7 @@ if (!empty($PurchaseRate))
 	$Discount=!empty($_POST['Discount'])?$_POST['Discount']:'';
 	$ItemExpiry=!empty($_POST['ItemExpiry'])?$_POST['ItemExpiry']:'';
 	$Amount=!empty($_POST['Amount'])?$_POST['Amount']:'';
-	
+
 	$query="SELECT * from purchase WHERE SellerID=$SellerID and ItemID=$ItemID and PurchaseDate='PurchaseDate'";
 	$result = mysqli_query($con,$query);
 	if(mysqli_num_rows($result)>0)
@@ -164,6 +165,80 @@ if (!empty($PurchaseRate))
 		}
 
 	}
+}
+
+
+$ItemIDArray=!empty($_POST['ItemIDArray'])?$_POST['ItemIDArray']:'';
+if (!empty($ItemIDArray))
+{
+	$RateArray=$_POST['RateArray'];
+	$QtyArray=$_POST['QtyArray'];
+	$AmountArray=$_POST['AmountArray'];
+	$DiscountArray=$_POST['DiscountArray'];
+	$ExpArray=$_POST['ExpArray'];
+
+	$Patient=$_POST['Patient'];
+	$Doctor=$_POST['Doctor'];
+
+
+
+	$query="SELECT * from billing order by BillID desc Limit 1";
+	$result = mysqli_query($con,$query);
+	if(mysqli_num_rows($result)>0)
+	{
+		$arr=mysqli_fetch_assoc($result);
+		$ID=$arr['BillID']+1;
+		$InvoiceNo=$FY.'VP'.$ID;
+
+	}else{
+		$InvoiceNo=$FY.'VP1';
+	}
+	for ($i=0; $i < count($ItemIDArray); $i++) { 
+
+
+		$query="SELECT * from purchase WHERE ItemID=$ItemIDArray[$i] and ExpiryDate='$ExpArray[$i]'";
+		$result = mysqli_query($con,$query);
+		if(mysqli_num_rows($result)>0)
+		{
+			$arr=mysqli_fetch_assoc($result);
+			$Saled=$arr['SaledQty'];
+		}
+		$Saled=$Saled+$QtyArray[$i];
+
+		$sql = "INSERT INTO billing (ItemID, Rate, Qty, Amount, Discount, BillDate, ExpiryDate, InvoiceNo, 	PateintName, DrName, BilledBy)
+		VALUES ($ItemIDArray[$i], $RateArray[$i], $QtyArray[$i], $AmountArray[$i], $DiscountArray[$i], '$Date', '$ExpArray[$i]', '$InvoiceNo', '$Patient', '$Doctor', $userid)";
+
+		if ($con->query($sql) === TRUE) {
+			$last_id = $con->insert_id;
+			$sql2 = "UPDATE purchase SET SaledQty=$Saled WHERE ItemID=$ItemIDArray[$i]";
+			if ($con->query($sql2) === TRUE) {
+			} else {
+				echo "Error: " . $sql2 . "<br>" . $con->error;
+			}
+
+		}else{
+			echo "Error: " . $sql . "<br>" . $con->error;
+		}
+	}
+	echo $last_id;
+}
+
+
+$CategoryIDChange=!empty($_POST['CategoryIDChange'])?$_POST['CategoryIDChange']:'';
+if (!empty($CategoryIDChange))
+{
+
+	$ItemIDC=!empty($_POST['ItemIDC'])?$_POST['ItemIDC']:'';
+
+
+	$sql = "UPDATE items set CategoryID=$CategoryIDChange WHERE ItemID=$ItemIDC";
+
+	if ($con->query($sql) === TRUE) {
+		echo 1;
+	} else {
+		echo "Error: " . $sql . "<br>" . $con->error;
+	}
+
 }
 
 

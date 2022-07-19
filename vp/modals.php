@@ -275,6 +275,7 @@
               <label>Purchase MRP Rate</label>
               <input type="number" min=0 class="form-control" name="PurchaseRate" id="PurchaseRate">
             </div>
+
             <div class="col-lg-6">
               <label>Quantity</label>
               <input type="number" min=0 class="form-control" name="Qty" id="Qty">
@@ -303,6 +304,108 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary SavePurchase">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="CreateInvoice" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Create Invoice</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+
+          <div class="col-lg-6">
+            <label>Pateint Name</label>
+            <input type="text" class="form-control" name="Pateint" id="Pateint">
+          </div>
+          <div class="col-lg-6">
+            <label>Dr. Name</label>
+            <input type="text" min=0 class="form-control" name="DrName" id="DrName">
+          </div>
+        </div>
+        <form id="AddInvoiceF">
+          <div class="row">
+            <div class="col-lg-6">
+              <label>Select Category</label>
+              <select class="form-select" id="CategoryInvoice">
+                <option value="">Select</option>
+                <?php 
+                $query="SELECT * from category order by Category";
+                $result = mysqli_query($con,$query);
+                if(mysqli_num_rows($result)>0)
+                {
+                  while ($row=mysqli_fetch_assoc($result))
+                  {
+                    echo "<option value='".$row['CategoryID']."'>".$row['Category']."</option><br>";
+                  }
+                }
+                ?>
+              </select>
+            </div>
+
+            <div class="col-lg-6">
+              <label>Select Item</label>
+              <select class="form-select" id="ItemInvoice">
+                <option value="">Select</option>
+              </select>
+            </div>
+
+            <div class="col-lg-6">
+              <label>MRP Rate</label>
+              <input type="text" min=0 class="form-control" name="SaleRate" id="SaleRate" disabled>
+            </div>
+            <div class="col-lg-6">
+              <label>Available Quantity</label>
+              <input type="number" min=0 class="form-control" name="AvailableQty" id="AvailableQty" disabled>
+            </div>
+            <div class="col-lg-6">
+              <label>Quantity</label>
+              <input type="number" min=0 class="form-control" name="Qty" id="QtyInvoice">
+            </div>
+            <div class="col-lg-6">
+              <label>Discount</label>
+              <input type="number" min=0 class="form-control" name="Discount" id="DiscountInvoice">
+            </div>
+            <center>
+              <div class="col-lg-6">
+                <label>Item Expiry Date</label>
+                <input type="date" class="form-control" min="<?php echo $Date; ?>" name="ItemExpiryInvoice" id="ItemExpiryInvoice" disabled>
+              </div>
+            </center>
+            <div class="col-lg-6">
+              <label>Item</label>
+              <input type="text" class="form-control d-none" name="Name" id="Name">
+            </div>
+          </div>
+        </form>
+        <table class="table table-hover table-bordered border-primary table-responsive" style="margin: 20px;">
+          <thead>
+            <th>Sr No.</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Discount</th>
+            <th>Amount</th>
+            <th>Expiry Date</th>
+            <th>Action</th>
+          </thead>
+          <tbody id="BillData">
+
+          </tbody>
+
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary AddInvoice">Add</button>
+        <button type="button" class="btn btn-primary GenerateInvoice">Save</button>
       </div>
     </div>
   </div>
